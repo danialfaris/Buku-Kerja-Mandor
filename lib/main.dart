@@ -1,35 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'bkm.dart';
+import 'application_drawer.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Buku Kerja Mandor',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: myColor,
-        fontFamily: 'Roboto',
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Beranda'),
-    );
-  }
+  runApp(MyHomePage());
 }
 
 const MaterialColor myColor = const MaterialColor(
@@ -46,117 +21,198 @@ const MaterialColor myColor = const MaterialColor(
   }
 );
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class MyHomePage extends StatelessWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: myColor,
+      ),
+      home:  Beranda(),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+class Beranda extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        drawer: MyDrawer("Beranda"),
+        appBar: AppBar(
+          title: Text(
+            "Beranda",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          elevation: 10,
+        ),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(15,15,15,10),
+          height: 1200,
+          width: double.maxFinite,
+          child: ListView(
+              children: <Widget>[
+                MenuButton(text: "BKM Hari Ini"),
+                SizedBox(height: 10),
+                MenuButton(text: "Rencana Kerja Harian"),
+                SizedBox(height: 10),
+                MenuButton(text: "Lihat Tim"),
+                SizedBox(height: 10),
+                MenuButton(text: "Kalendar"),
+              ]
+          ),
+        ),
+    );
   }
+}
+
+class MyDrawer extends StatelessWidget {
+  MyDrawer(this.currentPage);
+  final String currentPage;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              height: 150.0,
-              child: DrawerHeader(
-                child: Text('Categories'),
-                margin: EdgeInsets.all(10.0),
-                padding: EdgeInsets.all(0.0)
-              ),
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Container(
+            height: 150.0,
+            child: DrawerHeader(
+              margin: EdgeInsets.all(10.0),
+              padding: EdgeInsets.only(top: 50),
+              child: Text('Selamat datang,', style: TextStyle(color: Color(0xFF757575)),),
             ),
-            ListTile(
-              title: Text('Beranda'),
-              onTap: () {
-              },
+          ),
+          ListTile(
+            tileColor: this.currentPage == "Beranda" ? Color(0xFFC8E6C9) : Color(0x00000000),
+            title: Row(
+              children: [
+                Icon(Icons.home),
+                SizedBox(width: 20),
+                Text('Beranda'),
+              ],
             ),
-            ListTile(
-              title: Text('BKM Hari Ini'),
-              onTap: () {
-              },
-            ),
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(
-            "Beranda",
-            style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        elevation: 10,
-      ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(10,10,10,10),
-        height: 1200,
-        width: double.maxFinite,
-        child: ListView.builder(
-            itemCount: 1, // the length
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Card(
-                  color: Color(0xFF4CAF50),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "BKM Hari Ini",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize:20, color: Colors.white),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 50)
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+            onTap: () {
+              Navigator.pop(context);
+              if(this.currentPage == "Beranda") return;
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                    Beranda()
                 ),
               );
-            })
+            },
+          ),
+          ListTile(
+            tileColor: this.currentPage == "BKM" ? Color(0xFFC8E6C9) : Color(0x00000000),
+            title: Row(
+              children: [
+                Icon(Icons.add),
+                SizedBox(width: 20),
+                Text('BKM Hari Ini'),
+              ],
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              if(this.currentPage == "BKM") return;
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        BKM()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.assignment),
+                SizedBox(width: 20),
+                Text('Rencana Kerja Harian'),
+              ],
+            ),
+            onTap: () {
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.group),
+                SizedBox(width: 20),
+                Text('Lihat Tim'),
+              ],
+            ),
+            onTap: () {
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.calendar_today),
+                SizedBox(width: 20),
+                Text('Kalendar'),
+              ],
+            ),
+            onTap: () {
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.settings),
+                SizedBox(width: 20),
+                Text('Pengaturan'),
+              ],
+            ),
+            onTap: () {
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.logout),
+                SizedBox(width: 20),
+                Text('Logout'),
+              ],
+            ),
+            onTap: () {
+            },
+          ),
+        ],
+      ),
+    );
+    throw UnimplementedError();
+  }
+}
+
+class MenuButton extends StatelessWidget {
+  MenuButton({this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Card(
+        color: Color(0xFF74b474),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize:20, color: Colors.white),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 50)
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
