@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'drawer.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 const MaterialColor myColor = const MaterialColor(
@@ -44,7 +46,7 @@ class Beranda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: MyDrawer("Beranda"),
+        drawer: MyDrawer(),
         appBar: AppBar(
           title: Text(
             "Beranda",
@@ -58,13 +60,13 @@ class Beranda extends StatelessWidget {
           width: double.maxFinite,
           child: ListView(
               children: <Widget>[
-                MenuButton(text: "BKM Hari Ini"),
+                MenuButton("BKM Hari Ini"),
                 SizedBox(height: 10),
-                MenuButton(text: "Rencana Kerja Harian"),
+                MenuButton("Rencana Kerja Harian"),
                 SizedBox(height: 10),
-                MenuButton(text: "Lihat Tim"),
+                MenuButton("Lihat Tim"),
                 SizedBox(height: 10),
-                MenuButton(text: "Kalendar"),
+                MenuButton("Kalendar"),
               ]
           ),
         ),
@@ -73,7 +75,7 @@ class Beranda extends StatelessWidget {
 }
 
 class MenuButton extends StatelessWidget {
-  MenuButton({this.text});
+  MenuButton(this.text);
   final String text;
 
   @override

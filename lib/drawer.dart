@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 import 'bkm.dart';
+import 'kalendar.dart';
 import 'application_drawer.dart';
 
 class MyDrawer extends StatelessWidget {
-  MyDrawer(this.currentPage);
-  final String currentPage;
-
   @override
   Widget build(BuildContext context) {
     var currentDrawer = Provider.of<ApplicationDrawer>(context).getCurrentDrawer;
@@ -20,7 +18,7 @@ class MyDrawer extends StatelessWidget {
             child: DrawerHeader(
               margin: EdgeInsets.all(10.0),
               padding: EdgeInsets.only(top: 50),
-              child: Text(currentDrawer.toString(), style: TextStyle(color: Color(0xFF757575)),),
+              child: Text("Selamat datang, ", style: TextStyle(color: Color(0xFF757575)),),
             ),
           ),
           ListTile(
@@ -88,6 +86,7 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            tileColor: currentDrawer == 4 ? Color(0xFFC8E6C9) : Color(0x00000000),
             title: Row(
               children: [
                 Icon(Icons.calendar_today),
@@ -96,6 +95,15 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
+              if(currentDrawer == 4) return;
+              Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(4);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        Kalendar()
+                ),
+              );
             },
           ),
           ListTile(
