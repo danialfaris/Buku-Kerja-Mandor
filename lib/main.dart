@@ -1,8 +1,15 @@
 import 'package:buku_kerja_mandor/application_drawer.dart';
+import 'package:buku_kerja_mandor/kalendar.dart';
+import 'package:buku_kerja_mandor/lihat_tim.dart';
+import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'drawer.dart';
+import 'bkm.dart';
+import 'kalendar.dart';
+import 'rencana_kerja_harian.dart';
+import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -60,13 +67,13 @@ class Beranda extends StatelessWidget {
           width: double.maxFinite,
           child: ListView(
               children: <Widget>[
-                MenuButton("BKM Hari Ini"),
+                MenuButton(0),
                 SizedBox(height: 10),
-                MenuButton("Rencana Kerja Harian"),
+                MenuButton(1),
                 SizedBox(height: 10),
-                MenuButton("Lihat Tim"),
+                MenuButton(2),
                 SizedBox(height: 10),
-                MenuButton("Kalendar"),
+                MenuButton(3),
               ]
           ),
         ),
@@ -75,13 +82,43 @@ class Beranda extends StatelessWidget {
 }
 
 class MenuButton extends StatelessWidget {
-  MenuButton(this.text);
-  final String text;
+  MenuButton(this.num);
+  final int num;
+  final text = ["BKM Hari Ini","Rencana Kerja Harian","Lihat Tim","Kalendar"];
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        if(num == 0) {
+          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(1);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BKM()),
+          );
+        }
+        if(num == 1) {
+          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(2);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RencanaKerjaHarian()),
+          );
+        }
+        if(num == 2) {
+          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(3);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LihatTim()),
+          );
+        }
+        if(num == 3) {
+          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(4);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Kalendar()),
+          );
+        }
+      },
       child: Card(
         color: Color(0xFF74b474),
         child: Padding(
@@ -91,7 +128,7 @@ class MenuButton extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    text,
+                    text[num],
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize:20, color: Colors.white),
                   ),
                   Padding(

@@ -1,8 +1,11 @@
+import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 import 'bkm.dart';
 import 'kalendar.dart';
+import 'rencana_kerja_harian.dart';
+import 'lihat_tim.dart';
 import 'application_drawer.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -64,6 +67,7 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            tileColor: currentDrawer == 2 ? Color(0xFFC8E6C9) : Color(0x00000000),
             title: Row(
               children: [
                 Icon(Icons.assignment),
@@ -72,9 +76,19 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
+              if(currentDrawer == 2) return;
+              Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(2);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        RencanaKerjaHarian()
+                ),
+              );
             },
           ),
           ListTile(
+            tileColor: currentDrawer == 3 ? Color(0xFFC8E6C9) : Color(0x00000000),
             title: Row(
               children: [
                 Icon(Icons.group),
@@ -83,6 +97,15 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
+              if(currentDrawer == 3) return;
+              Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(3);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        LihatTim()
+                ),
+              );
             },
           ),
           ListTile(
