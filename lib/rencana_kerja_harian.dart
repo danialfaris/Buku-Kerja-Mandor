@@ -1,3 +1,4 @@
+import 'package:buku_kerja_mandor/lihat_aktivitas.dart';
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 
@@ -34,6 +35,10 @@ class RencanaKerjaHarian extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LihatAktivitas()),
+                  );
                 },
               ),
               ListTile(
