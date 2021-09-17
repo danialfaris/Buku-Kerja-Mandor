@@ -19,9 +19,15 @@ class MyDrawer extends StatelessWidget {
           Container(
             height: 150.0,
             child: DrawerHeader(
-              margin: EdgeInsets.all(10.0),
-              padding: EdgeInsets.only(top: 50),
-              child: Text("Selamat datang, ", style: TextStyle(color: Color(0xFF757575)),),
+              margin: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(top: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset('images/icon.png', height: 80, width: 80,),
+                  Text("Selamat datang, ", style: TextStyle(color: Color(0xFF757575)),)
+                ],
+              ),
             ),
           ),
           ListTile(

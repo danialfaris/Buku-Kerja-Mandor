@@ -11,7 +11,6 @@ import 'kalendar.dart';
 import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -127,9 +126,13 @@ class MenuButton extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text(
-                    text[num],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize:20, color: Colors.white),
+                  Row(
+                    children: [
+                      Text(
+                        text[num],
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize:20, color: Colors.white),
+                      ),
+                    ],
                   ),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 50)
