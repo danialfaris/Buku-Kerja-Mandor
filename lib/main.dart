@@ -5,14 +5,18 @@ import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'login.dart';
 import 'drawer.dart';
 import 'bkm.dart';
 import 'kalendar.dart';
 import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -37,8 +41,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           primaryColor: myColor,
+          fontFamily: 'Roboto',
         ),
-        home:  Beranda(),
+        home:  LoginPage(),
       ),
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<ApplicationDrawer>(
