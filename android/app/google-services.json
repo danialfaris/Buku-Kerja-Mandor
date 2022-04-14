@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "533926002047",
+    "project_id": "buku-kerja-mandor",
+    "storage_bucket": "buku-kerja-mandor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533926002047:android:5ac1a85c20dc161413ae4a",
+        "android_client_info": {
+          "package_name": "com.example.buku_kerja_mandor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533926002047-hl294plq912e7jo4vf97cv7qajllgueo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKXD91V8-jx9o_J8kvmZ6_lbssFrbrmmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533926002047-hl294plq912e7jo4vf97cv7qajllgueo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
