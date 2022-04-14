@@ -20,7 +20,7 @@ class MyDrawer extends StatelessWidget {
           Container(
             height: 160.0,
             child: DrawerHeader(
-              margin: EdgeInsets.only(left: 10.0),
+              margin: EdgeInsets.only(left: 20),
               padding: EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

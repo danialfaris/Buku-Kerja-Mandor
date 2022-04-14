@@ -14,9 +14,11 @@ import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemUiOverlay.bottom
+  ] );
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         theme: ThemeData(
-          primaryColor: myColor,
+          primarySwatch: myColor,
           fontFamily: 'Roboto',
         ),
         home:  LoginPage(),
@@ -123,8 +125,14 @@ class MenuButton extends StatelessWidget {
           );
         }
       },
-      child: Card(
-        color: Color(0xFF74b474),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/${text[num]}.png'),
+            fit: BoxFit.fitWidth,
+          ),
+          borderRadius: BorderRadius.circular(5),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(

@@ -31,7 +31,7 @@ class RencanaKerjaHarian extends StatelessWidget {
                   children: [
                     Icon(Icons.radio_button_unchecked),
                     SizedBox(width: 20),
-                    Text('T00 - Test'),
+                    Text('BAAA01 - Semprot Lalang'),
                   ],
                 ),
                 onTap: () {
