@@ -1,3 +1,7 @@
+import 'package:buku_kerja_mandor/app/modules/auth/controllers/auth_controller.dart';
+import 'package:buku_kerja_mandor/app/modules/home/views/home_view.dart';
+import 'package:buku_kerja_mandor/app/modules/login/views/login_view.dart';
+import 'package:buku_kerja_mandor/app/utils/loading.dart';
 import 'package:buku_kerja_mandor/application_drawer.dart';
 import 'package:buku_kerja_mandor/kalendar.dart';
 import 'package:buku_kerja_mandor/lihat_tim.dart';
@@ -5,6 +9,7 @@ import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'app/routes/app_pages.dart';
 import 'login.dart';
 import 'drawer.dart';
 import 'bkm.dart';
@@ -13,9 +18,13 @@ import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
     SystemUiOverlay.bottom
   ] );
@@ -37,20 +46,33 @@ const MaterialColor myColor = const MaterialColor(
 );
 
 class MyApp extends StatelessWidget {
+  final authC = Get.put(AuthController(), permanent: true);
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: myColor,
-          fontFamily: 'Roboto',
-        ),
-        home:  LoginPage(),
-      ),
-      providers: <SingleChildWidget>[
-        ChangeNotifierProvider<ApplicationDrawer>(
-            create: (_) => ApplicationDrawer())
-      ],
+    return StreamBuilder<User?>(
+      stream: authC.streamAuthStatus,
+      builder: (context, snapshot){
+        print(snapshot);
+        if(snapshot.connectionState == ConnectionState.active){
+          print(snapshot.data);
+          return MultiProvider(
+            child: GetMaterialApp(
+              initialRoute: snapshot.data != null? Routes.HOME : Routes.LOGIN,
+              theme: ThemeData(
+                primarySwatch: myColor,
+                fontFamily: 'Roboto',
+              ),
+              getPages: AppPages.routes,
+              // home: snapshot.data != null? HomeView() : LoginView(),
+            ),
+            providers: <SingleChildWidget>[
+              ChangeNotifierProvider<ApplicationDrawer>(
+                  create: (_) => ApplicationDrawer())
+            ],
+          );
+        }
+        return LoadingView();
+        },
     );
   }
 }

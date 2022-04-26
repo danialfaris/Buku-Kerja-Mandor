@@ -4,7 +4,6 @@ import 'bkm.dart';
 import 'package:intl/intl.dart';
 
 class Aktivitas2 extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -67,13 +66,12 @@ class Aktivitas2 extends StatelessWidget {
 
 class Aktivitas extends StatelessWidget {
   DateFormat dateFormat = DateFormat('dd MMMM yyyy');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Penggunaan Material",
+          "Aktivitas",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 10,
@@ -152,8 +150,6 @@ class Aktivitas extends StatelessWidget {
 }
 
 class LaporanAktivitas extends StatelessWidget {
-  DateFormat dateFormat = DateFormat('dd MMMM yyyy');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +175,7 @@ class LaporanAktivitas extends StatelessWidget {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 10, right: 200, left: 20),
+                padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
                 child: TextField(
                   controller: TextEditingController(),
                   style: TextStyle(
@@ -203,6 +199,77 @@ class LaporanAktivitas extends StatelessWidget {
                   ],
                 ),
                 
+                onTap: () {
+                },
+              ),
+
+            ]
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PrestasiKerja()),
+          );
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.navigate_next),
+      ),
+    );
+  }
+}
+
+class PrestasiKerja extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Prestasi Kerja Anggota",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        elevation: 10,
+      ),
+      body: Container(
+        height: 1200,
+        width: double.maxFinite,
+        child: ListView(
+            children: [
+              ListTile(
+                title: Row(
+                  children: [
+                    Text('19990511 - Suwardi', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                onTap: () {
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10, right: 200, left: 20),
+                child: TextField(
+                  controller: TextEditingController(),
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black
+                  ),
+                  decoration: new InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                    ),
+                    hintText: 'ha',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                ),
+              ),
+              ListTile(
+                tileColor: Color(0xFFC8E6C9),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Input Prestasi Kerja Anggota', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  ],
+                ),
+
                 onTap: () {
                 },
               ),
