@@ -1,3 +1,4 @@
+import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:flutter/material.dart';
 import 'laporan_aktivitas.dart';
 import 'drawer.dart';
@@ -61,6 +62,10 @@ class BKM extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TambahAktivitas()),
+                    );
                   },
                 ),
               ]

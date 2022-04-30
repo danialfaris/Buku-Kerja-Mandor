@@ -2,8 +2,10 @@ import 'package:buku_kerja_mandor/login.dart';
 import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'services/auth_services.dart';
 import 'main.dart';
 import 'bkm.dart';
+import 'beranda.dart';
 import 'kalendar.dart';
 import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
@@ -12,6 +14,7 @@ import 'application_drawer.dart';
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     var currentDrawer = Provider.of<ApplicationDrawer>(context).getCurrentDrawer;
     return Drawer(
       child: ListView(
@@ -161,8 +164,8 @@ class MyDrawer extends StatelessWidget {
                       Text('Logout'),
                     ],
                   ),
-                  onTap: () {
-                    Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                  onTap: () async {
+                    await authService.signOut();
                   },
                 ),
               ],

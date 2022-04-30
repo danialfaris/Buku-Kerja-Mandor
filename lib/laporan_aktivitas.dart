@@ -152,6 +152,7 @@ class Aktivitas extends StatelessWidget {
 class LaporanAktivitas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    TextEditingController _material = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -177,7 +178,7 @@ class LaporanAktivitas extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
                 child: TextField(
-                  controller: TextEditingController(),
+                  controller: _material,
                   style: TextStyle(
                     fontSize: 15.0,
                     color: Colors.black

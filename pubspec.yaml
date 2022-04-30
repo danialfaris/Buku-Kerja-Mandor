@@ -33,8 +33,6 @@ dependencies:
   firebase_core: ^1.14.0
   cloud_firestore: ^3.1.11
   firebase_auth: ^3.3.13
-  get: ^4.6.1
-  get_cli: ^1.7.1
 
 dev_dependencies:
   flutter_test:
