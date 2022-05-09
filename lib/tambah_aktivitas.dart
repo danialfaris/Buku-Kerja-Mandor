@@ -1,13 +1,22 @@
 import 'dart:async';
 
+import 'package:buku_kerja_mandor/models/validation_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+class TambahAktivitas extends StatefulWidget{
+  const TambahAktivitas({Key? key}) : super(key: key);
+  @override
+  _TambahAktivitas createState() => _TambahAktivitas();
+}
 
-class TambahAktivitas extends StatelessWidget {
+class _TambahAktivitas extends State<TambahAktivitas> {
   final _formKey = GlobalKey<FormState>();
+  FormProvider? _formProvider;
 
   Future tambahAktivitas({required String test}) async {
     final testing = FirebaseFirestore.instance.collection('test').doc('more-test');
@@ -21,6 +30,7 @@ class TambahAktivitas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<FormProvider> (context);
     TextEditingController _Kode = TextEditingController();
     TextEditingController _Nama = TextEditingController();
     TextEditingController _Sektor = TextEditingController();
@@ -44,19 +54,14 @@ class TambahAktivitas extends StatelessWidget {
                   children: [
                     DropDownWidget(),
                     ListTile(
-                      title: Text("test",
+                      title: Text("Blok",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           )),
                       subtitle:
-                      TextFormField(
-                        controller: _Bahan,
-                        validator: (test){
-                          if (test == null || test.isEmpty){
-                            return 'Please enter some text';
-                          }
-                        },
+                      TextField(
+                        controller: _Blok,
                         style: TextStyle(
                             fontSize: 20.0,
                             color: Colors.black
@@ -78,7 +83,7 @@ class TambahAktivitas extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
-                            tambahAktivitas(test: _Bahan.text );
+                            tambahAktivitas(test: _Blok.text );
                           }
                         },
                         child: const Text('Submit'),
@@ -131,6 +136,7 @@ class TambahAktivitas extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class TextFieldClass extends StatelessWidget{
@@ -177,6 +183,7 @@ class _DropDownWidgetState extends State<DropDownWidget>{
   Widget build(BuildContext context) {
     return DropdownButton<String>(
         value: dropdownValue,
+        icon: const Icon(Icons.arrow_downward),
         items: <String>[
           'Pilih Aktivitas',
           'Penyemprotan',
@@ -197,5 +204,56 @@ class _DropDownWidgetState extends State<DropDownWidget>{
           });
         },
     );
+  }
+}
+
+class FormProvider with ChangeNotifier{
+  ValidationModel _jenis = ValidationModel(null, null);
+  ValidationModel _kode = ValidationModel(null, null);
+  ValidationModel _sektor = ValidationModel(null, null);
+  ValidationModel _blok = ValidationModel(null, null);
+  ValidationModel get jenis => _jenis;
+  ValidationModel get kode => _kode;
+  ValidationModel get sektor => _sektor;
+  ValidationModel get blok => _blok;
+
+  void validateJenis(String? val){
+    if (val != null){
+      _jenis = ValidationModel(val, null);
+    } else{
+      _jenis = ValidationModel(null, 'Pilih Jenis Aktivitas');
+    }
+    notifyListeners();
+  }
+  void validateKode(String? val){
+    if (val != null){
+      _kode = ValidationModel(val, null);
+    } else{
+      _kode = ValidationModel(null, 'Masukkan Kode Aktivitas');
+    }
+    notifyListeners();
+  }
+  void validateSektor(String? val){
+    if (val != null){
+      _sektor = ValidationModel(val, null);
+    } else{
+      _sektor = ValidationModel(null, 'Masukkan Sektor');
+    }
+    notifyListeners();
+  }
+  void validateBlok(String? val){
+    if (val != null){
+      _blok = ValidationModel(val, null);
+    } else{
+      _blok = ValidationModel(null, 'Masukkan Blok');
+    }
+    notifyListeners();
+  }
+  bool get validate{
+    return
+      _jenis.value != null &&
+          _kode.value != null &&
+          _sektor.value != null &&
+          _blok.value != null;
   }
 }

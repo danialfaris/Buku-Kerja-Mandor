@@ -1,4 +1,5 @@
 import 'package:buku_kerja_mandor/services/auth_services.dart';
+import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:buku_kerja_mandor/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,10 @@ class MyApp extends StatelessWidget {
             create: (_) => AuthService(),
         ),
         ChangeNotifierProvider<ApplicationDrawer>(
-            create: (_) => ApplicationDrawer())
+            create: (_) => ApplicationDrawer()
+        ),
+        ChangeNotifierProvider(
+            create: (_) => FormProvider()),
       ],
       child: MaterialApp(
           theme: ThemeData(

@@ -51,6 +51,9 @@ class LoginPage extends StatelessWidget {
                         borderRadius: new BorderRadius.circular(3)
                     )
                 ),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
               ),
             ),
             Padding(
