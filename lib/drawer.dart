@@ -166,6 +166,7 @@ class MyDrawer extends StatelessWidget {
                   ),
                   onTap: () async {
                     await authService.signOut();
+                    Navigator.pushReplacementNamed(context, '/');
                   },
                 ),
               ],

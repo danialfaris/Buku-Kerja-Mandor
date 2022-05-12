@@ -1,8 +1,12 @@
 import 'package:buku_kerja_mandor/main.dart';
+import 'package:buku_kerja_mandor/services/database_service.dart';
+import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'drawer.dart';
 import 'package:intl/intl.dart';
+
+import 'models/activity_model.dart';
 
 class Kalendar extends StatefulWidget{
   @override
@@ -12,6 +16,7 @@ class Kalendar extends StatefulWidget{
 class _KalendarState extends State<Kalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +87,127 @@ class _KalendarState extends State<Kalendar> {
               _focusedDay = focusedDay;
             });
           }
+          String formatted = formatter.format(selectedDay);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RKH(formatted)),
+          );
         },
         onPageChanged: (focusedDay) {
           // No need to call `setState()` here
           _focusedDay = focusedDay;
         },
+      ),
+    );
+  }
+}
+
+class RKH extends StatefulWidget {
+  RKH(this.date);
+  final String date;
+  @override
+  State<RKH> createState()=>_RKHState(date);
+}
+
+class _RKHState extends State<RKH> {
+  _RKHState(this.date);
+  final String date;
+  DatabaseService service = DatabaseService();
+  static final DateTime now = DateTime.now();
+  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final String formatted = formatter.format(now);
+  Future<List<Aktivitas>>? listAktivitas;
+  List<Aktivitas>? listTerambil;
+
+  void initState(){
+    super.initState();
+    _initRetrieval();
+  }
+
+  Future<void> _initRetrieval() async {
+    listAktivitas = service.ambilAktivitasHari(date);
+    listTerambil = await service.ambilAktivitasHari(date);
+  }
+
+  Future<Null> _refresh() {
+    return service.ambilAktivitasHari(date).then((_list) {
+      setState(() => listTerambil = _list);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          date,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        elevation: 10,
+        actions: [
+          // action button
+          IconButton(
+            icon: Icon(Icons.refresh, size: 30),
+            onPressed: () { },
+          ),
+        ],
+      ),
+      body: Container(
+        height: 1200,
+        width: double.maxFinite,
+        child: ListView(
+            children: [
+              RefreshIndicator(
+                onRefresh: _refresh,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: FutureBuilder(
+                    future: listAktivitas,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<List<Aktivitas>> snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: listTerambil!.length,
+                            separatorBuilder: (context, index) => const SizedBox(
+                              height: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
+                                subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context,
+                                      "/view",
+                                      arguments: listTerambil![index])
+                                      .then((context) => _refresh());
+                                },
+                              );
+                            });
+                      } else if (snapshot.connectionState == ConnectionState.done &&
+                          listTerambil!.isEmpty) {
+                        return Center(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: const <Widget>[
+                              SizedBox(height: 20),
+                              Align(alignment: AlignmentDirectional.center,
+                                  child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ]
+        ),
       ),
     );
   }

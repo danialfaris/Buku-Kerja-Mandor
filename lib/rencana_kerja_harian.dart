@@ -1,8 +1,43 @@
-import 'package:buku_kerja_mandor/lihat_aktivitas.dart';
+import 'package:buku_kerja_mandor/services/database_service.dart';
+import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'laporan_aktivitas.dart';
 import 'drawer.dart';
+import 'models/activity_model.dart';
+import 'package:intl/intl.dart';
 
-class RencanaKerjaHarian extends StatelessWidget {
+class RencanaKerjaHarian extends StatefulWidget {
+  const RencanaKerjaHarian({Key? key}) : super (key: key);
+
+  @override
+  State<RencanaKerjaHarian> createState()=>_RencanaKerjaHarianState();
+}
+
+class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
+  DatabaseService service = DatabaseService();
+  static final DateTime now = DateTime.now();
+  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final String formatted = formatter.format(now);
+  Future<List<Aktivitas>>? listAktivitas;
+  List<Aktivitas>? listTerambil;
+
+  void initState(){
+    super.initState();
+    _initRetrieval();
+  }
+
+  Future<void> _initRetrieval() async {
+    listAktivitas = service.ambilAktivitasHari(formatted);
+    listTerambil = await service.ambilAktivitasHari(formatted);
+  }
+
+  Future<Null> _refresh() {
+    return service.ambilAktivitasHari(formatted).then((_list) {
+      setState(() => listTerambil = _list);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,39 +57,77 @@ class RencanaKerjaHarian extends StatelessWidget {
         ],
       ),
       body: Container(
-        height: 1200,
-        width: double.maxFinite,
-        child: ListView(
+          height: 1200,
+          width: double.maxFinite,
+          child: ListView(
             children: [
-              ListTile(
-                title: Row(
-                  children: [
-                    Icon(Icons.radio_button_unchecked),
-                    SizedBox(width: 20),
-                    Text('BAAA01 - Semprot Lalang'),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LihatAktivitas()),
-                  );
+            RefreshIndicator(
+            onRefresh: _refresh,
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: FutureBuilder(
+                future: listAktivitas,
+                builder:
+                    (BuildContext context, AsyncSnapshot<List<Aktivitas>> snapshot) {
+                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    return ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: listTerambil!.length,
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
+                            subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context,
+                                  "/view",
+                                  arguments: listTerambil![index])
+                                  .then((context) => _refresh());
+                            },
+                          );
+                        });
+                  } else if (snapshot.connectionState == ConnectionState.done &&
+                      listTerambil!.isEmpty) {
+                    return Center(
+                      child: ListView(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        children: const <Widget>[
+                          Align(alignment: AlignmentDirectional.center,
+                              child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
                 },
               ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Icon(Icons.radio_button_unchecked),
-                    SizedBox(width: 20),
-                    Text('T01 - Test'),
-                  ],
-                ),
-                onTap: () {
-                },
-              ),
-            ]
-        ),
+            ),
+          ),
+          SizedBox(height: 10),
+          ListTile(
+          tileColor: Color(0xFFC8E6C9),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Tambah Aktivitas', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+        ],
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TambahAktivitas()),
+        );
+      },
+    ),
+    ]
+    ),
+    ),
     );
   }
 }

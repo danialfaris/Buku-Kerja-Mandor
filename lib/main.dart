@@ -1,3 +1,5 @@
+import 'package:buku_kerja_mandor/laporan_aktivitas.dart';
+import 'package:buku_kerja_mandor/lihat_aktivitas.dart';
 import 'package:buku_kerja_mandor/services/auth_services.dart';
 import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:buku_kerja_mandor/wrapper.dart';
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
           routes:{
             '/': (context) => Wrapper(),
             '/login': (context) => LoginPage(),
+            '/edit' : (context) => LaporAktivitas(),
+            '/view' : (context) => LihatAktivitas(),
           }
       ),
     );

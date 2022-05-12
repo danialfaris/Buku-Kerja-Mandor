@@ -3,18 +3,22 @@ import 'main.dart';
 import 'laporan_aktivitas.dart';
 import 'package:intl/intl.dart';
 
+import 'models/activity_model.dart';
+
 class LihatAktivitas extends StatelessWidget {
+  LihatAktivitas({Key? key}) : super(key: key);
   DateFormat dateFormat = DateFormat('dd MMMM yyyy');
+  static const routeName = '/view';
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Aktivitas;
     return MaterialApp(
       theme: ThemeData(primarySwatch: myColor),
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-
             bottom: TabBar(
               tabs: [
                 Tab(text: "Aktivitas"),
@@ -31,9 +35,9 @@ class LihatAktivitas extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              TabAktivitas(),
-              TabMaterial(),
-              TabAnggota(),
+              TabAktivitas(args),
+              TabMaterial(args),
+              TabAnggota(args),
             ],
           ),
         ),
@@ -43,6 +47,9 @@ class LihatAktivitas extends StatelessWidget {
 }
 
 class TabAktivitas extends StatelessWidget {
+  final Aktivitas args;
+  TabAktivitas(this.args);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -57,7 +64,7 @@ class TabAktivitas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('BAAA01 - Semprot Lalang',
+              Text("${args.kode} - ${args.jenis}",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
             ],
           ),
@@ -74,14 +81,13 @@ class TabAktivitas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('A02',
+              Text(args.sektor,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
             ],
           ),
           onTap: () {
           },
         ),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
         ListTile(
           title:
           Text('Blok',
@@ -91,24 +97,62 @@ class TabAktivitas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('04',
+              Text(args.blok,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
             ],
           ),
           onTap: () {
           },
         ),
+        ListTile(
+          title:
+          Text('Target',
+              style: TextStyle(color: Color(0xFF757575))),
+          subtitle:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              Text("${args.target} Ha",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+            ],
+          ),
+          onTap: () {
+          },
+        ),
+        args.realisasi != null ?
+        ListTile(
+          title:
+          Text('Realisasi',
+              style: TextStyle(color: Color(0xFF757575))),
+          subtitle:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              Text("${args.realisasi} Ha",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+            ],
+          ),
+          onTap: () {
+          },
+        ): SizedBox(),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
       ],
     );
   }
 }
 
 class TabMaterial extends StatelessWidget {
+  final Aktivitas args;
+  TabMaterial(this.args);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+        args.jenis == "Penyemprotan" ?
         ListTile(
           title:
           Text('Knapsack Sprayer INTER',
@@ -121,13 +165,14 @@ class TabMaterial extends StatelessWidget {
               Text('Kuantitas',
                   style: TextStyle(color: Color(0xFF757575))),
               const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('3 pc(s)',
+              args.liter == null ? Text("Belum terisi") :
+              Text("${args.liter} liter",
                   style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
             ],
           ),
           onTap: () {
           },
-        ),
+        ): SizedBox(),
         Divider(),
       ],
     );
@@ -135,6 +180,9 @@ class TabMaterial extends StatelessWidget {
 }
 
 class TabAnggota extends StatelessWidget {
+  final Aktivitas args;
+  TabAnggota(this.args);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -144,6 +192,7 @@ class TabAnggota extends StatelessWidget {
             title:
                 Text('19921000087 - Edi Pangestu',
                     style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+            /**
             subtitle:
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,6 +205,7 @@ class TabAnggota extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                   ],
                 ),
+                **/
             onTap: () {
             },
           ),

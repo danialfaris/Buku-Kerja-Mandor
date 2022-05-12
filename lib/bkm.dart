@@ -1,9 +1,44 @@
+import 'package:buku_kerja_mandor/main.dart';
+import 'package:buku_kerja_mandor/services/database_service.dart';
 import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'laporan_aktivitas.dart';
 import 'drawer.dart';
+import 'models/activity_model.dart';
+import 'package:intl/intl.dart';
 
-class BKM extends StatelessWidget {
+class BKM extends StatefulWidget {
+  const BKM({Key? key}) : super (key: key);
+
+  @override
+  State<BKM> createState()=>_BKMState();
+}
+
+class _BKMState extends State<BKM> {
+  DatabaseService service = DatabaseService();
+  Future<List<Aktivitas>>? listAktivitas;
+  List<Aktivitas>? listTerambil;
+  static final DateTime now = DateTime.now();
+  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final String formatted = formatter.format(now);
+
+  void initState(){
+    super.initState();
+    _initRetrieval();
+  }
+
+  Future<void> _initRetrieval() async {
+    listAktivitas = service.ambilAktivitasHari(formatted);
+    listTerambil = await service.ambilAktivitasHari(formatted);
+  }
+
+  Future<Null> _refresh() {
+    return service.ambilAktivitasHari(formatted).then((_list) {
+      setState(() => listTerambil = _list);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -18,7 +53,7 @@ class BKM extends StatelessWidget {
             // action button
             IconButton(
               icon: Icon(Icons.refresh, size: 30),
-              onPressed: () { },
+              onPressed: _refresh,
             ),
           ],
         ),
@@ -27,38 +62,76 @@ class BKM extends StatelessWidget {
           width: double.maxFinite,
           child: ListView(
               children: [
-                ListTile(
-                  title: Row(
-                    children: [
-                      Icon(Icons.radio_button_unchecked),
-                      SizedBox(width: 20),
-                      Text('BAAA01 - Semprot Lalang'),
-                    ],
+                SizedBox(height: 5),
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: FutureBuilder(
+                      future: listAktivitas,
+                      builder:
+                          (BuildContext context, AsyncSnapshot<List<Aktivitas>> snapshot) {
+                        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                          return ListView.separated(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: listTerambil!.length,
+                              separatorBuilder: (context, index) => const Divider(),
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Row(
+                                    children: [
+                                      listTerambil![index].realisasi == null ?
+                                      Icon(Icons.radio_button_unchecked) :
+                                          Icon(Icons.radio_button_checked, color: myColor),
+                                      SizedBox(width: 20),
+                                      Expanded(
+                                          child: ListTile(
+                                            title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}",
+                                              style: TextStyle(fontSize: 20)),
+                                            subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}",
+                                                style: TextStyle(fontSize: 20)),
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                  onTap: () {
+                                        Navigator.pushNamed(
+                                            context,
+                                            "/edit",
+                                            arguments: listTerambil![index])
+                                            .then(
+                                                (context) => _refresh());
+                                  },
+                                );
+                              });
+                        } else if (snapshot.connectionState == ConnectionState.done &&
+                            listTerambil!.isEmpty) {
+                          return Center(
+                            child: ListView(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              children: const <Widget>[
+                                Align(alignment: AlignmentDirectional.center,
+                                    child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Aktivitas()),
-                    );
-                  },
                 ),
-                ListTile(
-                  title: Row(
-                    children: [
-                      Icon(Icons.radio_button_unchecked),
-                      SizedBox(width: 20),
-                      Text('T01 - Test'),
-                    ],
-                  ),
-                  onTap: () {
-                  },
-                ),
+                Divider(),
+                /**
                 ListTile(
                   tileColor: Color(0xFFC8E6C9),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Input Aktivitas', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                      Text('Tambah Aktivitas', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                     ],
                   ),
                   onTap: () {
@@ -67,7 +140,7 @@ class BKM extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => TambahAktivitas()),
                     );
                   },
-                ),
+                ),**/
               ]
           ),
         ),

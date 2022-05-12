@@ -1,73 +1,24 @@
+import 'package:buku_kerja_mandor/models/activity_model.dart';
+import 'package:buku_kerja_mandor/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'bkm.dart';
 import 'package:intl/intl.dart';
+import 'models/activity_model.dart';
 
-class Aktivitas2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-        ListTile(
-          title:
-          Text('Aktivitas',
-              style: TextStyle(color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('BAAA01 - Semprot Lalang',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-        ListTile(
-          title:
-          Text('Sektor',
-              style: TextStyle(color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('A02',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-        ListTile(
-          title:
-          Text('Blok',
-              style: TextStyle(color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('04',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ),
-      ],
-    );
-  }
-}
+class LaporAktivitas extends StatelessWidget {
+  LaporAktivitas({Key? key}) : super(key: key);
 
-class Aktivitas extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
   DateFormat dateFormat = DateFormat('dd MMMM yyyy');
+  TextEditingController _realisasi = TextEditingController();
+  TextEditingController _liter = TextEditingController();
+  static const routeName = '/edit';
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Aktivitas;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -79,97 +30,83 @@ class Aktivitas extends StatelessWidget {
       body: Container(
         height: 1200,
         width: double.maxFinite,
-        child: ListView(
-          children: [
-            const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-            ListTile(
-              title:
-              Text('Aktivitas',
-                  style: TextStyle(color: Color(0xFF757575))),
-              subtitle:
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                  Text('BAAA01 - Semprot Lalang',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                ],
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: <Widget>[
+              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              ListTile(
+                title:
+                Text('Kode',
+                    style: TextStyle(color: Color(0xFF757575))),
+                subtitle:
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                    Text("${args.kode} - ${args.jenis}",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  ],
+                ),
+                onTap: () {
+                },
               ),
-              onTap: () {
-              },
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-            ListTile(
-              title:
-              Text('Sektor',
-                  style: TextStyle(color: Color(0xFF757575))),
-              subtitle:
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                  Text('A02',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                ],
+              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              ListTile(
+                title:
+                Text('Sektor',
+                    style: TextStyle(color: Color(0xFF757575))),
+                subtitle:
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                    Text(args.sektor,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  ],
+                ),
+                onTap: () {
+                },
               ),
-              onTap: () {
-              },
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-            ListTile(
-              title:
-              Text('Blok',
-                  style: TextStyle(color: Color(0xFF757575))),
-              subtitle:
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                  Text('04',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                ],
+              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              ListTile(
+                title:
+                Text('Blok',
+                    style: TextStyle(color: Color(0xFF757575))),
+                subtitle:
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                    Text(args.blok,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  ],
+                ),
+                onTap: () {
+                },
               ),
-              onTap: () {
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LaporanAktivitas()),
-          );
-        },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.navigate_next),
-      ),
-    );
-  }
-}
-
-class LaporanAktivitas extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    TextEditingController _material = TextEditingController();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Penggunaan Material",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        elevation: 10,
-      ),
-      body: Container(
-        height: 1200,
-        width: double.maxFinite,
-        child: ListView(
-            children: [
+              ListTile(
+                title:
+                Text('Target Ha',
+                    style: TextStyle(color: Color(0xFF757575))),
+                subtitle:
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                    Text("${args.target.toDouble()} Ha",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  ],
+                ),
+                onTap: () {
+                },
+              ),
+              SizedBox(height: 5),
+              Divider(thickness: 10),
               ListTile(
                 title: Row(
                   children: [
-                    Text('Knapsack Sprayer INTER', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Realisasi ha', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
                 onTap: () {
@@ -177,20 +114,64 @@ class LaporanAktivitas extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
-                child: TextField(
-                  controller: _material,
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _realisasi,
                   style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.black
+                      fontSize: 15.0,
+                      color: Colors.black
                   ),
                   decoration: new InputDecoration(
                     enabledBorder: OutlineInputBorder(
                     ),
-                    hintText: 'Kuantitas',
+                    hintText: args.realisasi == null ? 'Ha' : "${args.realisasi}",
                     contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Masukkan jumlah Ha yang terealisasikan.';
+                    }
+                    return null;
+                  },
                 ),
               ),
+
+              args.jenis == "Penyemprotan" ?
+              ListTile(
+                title: Row(
+                  children: [
+                    Text('Pemakaian', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                onTap: () {
+                },
+              ):SizedBox(),
+              args.jenis == "Penyemprotan" ?
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _liter,
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black
+                  ),
+                  decoration: new InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                    ),
+                    hintText: args.liter == null ? 'Liter' : "${args.liter}",
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Masukkan jumlah liter yang digunakan';
+                    }
+                    return null;
+                  },
+                ),
+              ):SizedBox(),
+
+              SizedBox(height: 15),
               ListTile(
                 tileColor: Color(0xFFC8E6C9),
                 title: Row(
@@ -199,28 +180,39 @@ class LaporanAktivitas extends StatelessWidget {
                     Text('Input Penggunaan Material', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                   ],
                 ),
-                
-                onTap: () {
+                onTap: () async {
+                  print(_realisasi.text);
+                  if (_formKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
+                    DatabaseService service = DatabaseService();
+                    Aktivitas aktivitas = Aktivitas(
+                        tanggal: args.tanggal,
+                        jenis: args.jenis,
+                        kode: args.kode,
+                        sektor: args.sektor,
+                        blok: args.blok,
+                        target: args.target,
+                        realisasi: int.parse(_realisasi.text),
+                        liter: args.jenis == "Penyemprotan" ? int.parse(_liter.text) : args.liter,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Memproses Data')),
+                    );
+                    await service.updateAktivitas(aktivitas);
+                    Navigator.pop(context);
+                  }
                 },
               ),
-
-            ]
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PrestasiKerja()),
-          );
-        },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.navigate_next),
-      ),
+            ],
+          ),
+        )
+      )
     );
   }
 }
 
+/**
 class PrestasiKerja extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -290,4 +282,4 @@ class PrestasiKerja extends StatelessWidget {
       ),
     );
   }
-}
+}**/
