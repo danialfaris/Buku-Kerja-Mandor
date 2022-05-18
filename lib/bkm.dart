@@ -2,6 +2,7 @@ import 'package:buku_kerja_mandor/main.dart';
 import 'package:buku_kerja_mandor/services/database_service.dart';
 import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'laporan_aktivitas.dart';
 import 'drawer.dart';
@@ -20,7 +21,7 @@ class _BKMState extends State<BKM> {
   Future<List<Aktivitas>>? listAktivitas;
   List<Aktivitas>? listTerambil;
   static final DateTime now = DateTime.now();
-  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
   final String formatted = formatter.format(now);
 
   void initState(){
@@ -112,8 +113,10 @@ class _BKMState extends State<BKM> {
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               children: const <Widget>[
+                                SizedBox(height: 20),
                                 Align(alignment: AlignmentDirectional.center,
                                     child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                                SizedBox(height: 15),
                               ],
                             ),
                           );

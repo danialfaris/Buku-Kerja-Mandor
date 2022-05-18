@@ -24,6 +24,7 @@ class _TambahAktivitas extends State<TambahAktivitas> {
   FormProvider? _formProvider;
   String dropdownValue= 'Pilih Aktivitas';
   TextEditingController dateinput = TextEditingController();
+  static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
 
   void initState(){
     dateinput.text = "";
@@ -97,7 +98,7 @@ class _TambahAktivitas extends State<TambahAktivitas> {
 
                         if(pickedDate != null ){
                           print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                          String formattedDate = formatter.format(pickedDate);
                           print(formattedDate); //formatted date output using intl package =>  2021-03-16
                           //you can implement different kind of Date Format here according to your requirement
 

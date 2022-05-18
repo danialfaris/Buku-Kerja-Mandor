@@ -17,7 +17,7 @@ class RencanaKerjaHarian extends StatefulWidget {
 class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
   DatabaseService service = DatabaseService();
   static final DateTime now = DateTime.now();
-  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
   final String formatted = formatter.format(now);
   Future<List<Aktivitas>>? listAktivitas;
   List<Aktivitas>? listTerambil;
@@ -85,8 +85,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                               Navigator.pushNamed(
                                   context,
                                   "/view",
-                                  arguments: listTerambil![index])
-                                  .then((context) => _refresh());
+                                  arguments: listTerambil![index]);
                             },
                           );
                         });
@@ -97,8 +96,10 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         children: const <Widget>[
+                          SizedBox(height: 20),
                           Align(alignment: AlignmentDirectional.center,
                               child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                          SizedBox(height: 15),
                         ],
                       ),
                     );
@@ -122,7 +123,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TambahAktivitas()),
-        );
+        ).then((context) => _refresh());
       },
     ),
     ]

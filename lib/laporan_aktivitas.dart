@@ -177,7 +177,7 @@ class LaporAktivitas extends StatelessWidget {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Input Penggunaan Material', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                    Text('Laporkan', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                   ],
                 ),
                 onTap: () async {

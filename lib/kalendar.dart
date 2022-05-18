@@ -16,7 +16,29 @@ class Kalendar extends StatefulWidget{
 class _KalendarState extends State<Kalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
+
+  DatabaseService service = DatabaseService();
+  Future<List<Aktivitas>>? listAktivitas;
+  List<Aktivitas>? listTerambil;
+
+  void initState(){
+    super.initState();
+    _initRetrieval();
+  }
+
+  Future<void> _initRetrieval() async {
+    listAktivitas = service.ambilAktivitasHari(formatter.format(_focusedDay));
+    listTerambil = await service.ambilAktivitasHari(formatter.format(_focusedDay));
+  }
+
+
+  Future<void> _setRetrieval(date) async {
+    setState(() async {
+      listAktivitas = service.ambilAktivitasHari(date);
+      listTerambil = await service.ambilAktivitasHari(date);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +78,8 @@ class _KalendarState extends State<Kalendar> {
             color: Color(0xFFD32F2F),
             shape: BoxShape.circle,
           ),
-          selectedDecoration: BoxDecoration(color: Color(0x00000000)),
+          selectedDecoration: BoxDecoration (
+          ),
           selectedTextStyle: TextStyle(fontWeight: FontWeight.bold),
         ),
         headerStyle: HeaderStyle(
@@ -88,10 +111,78 @@ class _KalendarState extends State<Kalendar> {
             });
           }
           String formatted = formatter.format(selectedDay);
+          _setRetrieval(formatted);
+          showModalBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(
+                    formatted,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  automaticallyImplyLeading: false,
+                ),
+                body: ListView(
+                    children: [
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: FutureBuilder(
+                            future: listAktivitas,
+                            builder:
+                                (BuildContext context, AsyncSnapshot<List<Aktivitas>> snapshot) {
+                              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                                return ListView.separated(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: listTerambil!.length,
+                                    separatorBuilder: (context, index) => const Divider(),
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
+                                        subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context,
+                                              "/view",
+                                              arguments: listTerambil![index]);
+                                        },
+                                      );
+                                    });
+                              } else if (snapshot.connectionState == ConnectionState.done &&
+                                  listTerambil!.isEmpty) {
+                                return Center(
+                                  child: ListView(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    children: const <Widget>[
+                                      SizedBox(height: 20),
+                                      Align(alignment: AlignmentDirectional.center,
+                                          child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                                      SizedBox(height: 20),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      Divider(),
+                    ]
+                ),
+              );
+            },
+          );
+          /**
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => RKH(formatted)),
           );
+              **/
         },
         onPageChanged: (focusedDay) {
           // No need to call `setState()` here
@@ -114,7 +205,7 @@ class _RKHState extends State<RKH> {
   final String date;
   DatabaseService service = DatabaseService();
   static final DateTime now = DateTime.now();
-  static final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  static final DateFormat formatter = DateFormat('dd-MMMM-yyyy');
   final String formatted = formatter.format(now);
   Future<List<Aktivitas>>? listAktivitas;
   List<Aktivitas>? listTerambil;
@@ -170,9 +261,7 @@ class _RKHState extends State<RKH> {
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemCount: listTerambil!.length,
-                            separatorBuilder: (context, index) => const SizedBox(
-                              height: 10,
-                            ),
+                            separatorBuilder: (context, index) => const Divider(),
                             itemBuilder: (context, index) {
                               return ListTile(
                                 title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
@@ -196,6 +285,7 @@ class _RKHState extends State<RKH> {
                               SizedBox(height: 20),
                               Align(alignment: AlignmentDirectional.center,
                                   child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                              SizedBox(height: 20),
                             ],
                           ),
                         );
@@ -206,6 +296,7 @@ class _RKHState extends State<RKH> {
                   ),
                 ),
               ),
+              Divider(),
             ]
         ),
       ),
