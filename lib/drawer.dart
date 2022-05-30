@@ -6,7 +6,7 @@ import 'services/auth_services.dart';
 import 'main.dart';
 import 'bkm.dart';
 import 'beranda.dart';
-import 'kalendar.dart';
+import 'kalender.dart';
 import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
 import 'application_drawer.dart';
@@ -140,7 +140,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              Kalendar()
+                              Kalender()
                       ),
                     );
                   },

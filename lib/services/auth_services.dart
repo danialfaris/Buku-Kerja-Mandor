@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:buku_kerja_mandor/models/user_model.dart';
 
 class AuthService{
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   User? _userFromFirebase(auth.User? user){
     if (user == null){
@@ -16,13 +18,14 @@ class AuthService{
   }
 
   Future<User?> signInWithEmailAndPassword(
-      String email,
+      String username,
       String password,
       )
   async {
+    QuerySnapshot snap = await _db.collection("akun").where("username", isEqualTo: username).get();
     try{
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
+        email: snap.docs[0]['email'],
         password: password,
       );
       return _userFromFirebase(credential.user);
@@ -38,12 +41,18 @@ class AuthService{
   Future<User?> createUserWithEmailAndPassword(
       String email,
       String password,
+      String username,
       )
   async {
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password
     );
+    await _db.collection("akun").add({
+      'email': email,
+      'username': username,
+      'role': "user",
+    });
     return _userFromFirebase(credential.user);
   }
 

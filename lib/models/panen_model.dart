@@ -1,22 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Aktivitas{
+class AktivitasPanen{
   final String? id;
   final String tanggal;
 
   final String jenis;
   final String kode;
+  final String sektor;
+  final String blok;
 
   final int target;
   final int? realisasi;
   final int? liter;
 
-  Aktivitas({
+  AktivitasPanen({
     this.id,
     required this.tanggal,
 
     required this.jenis,
     required this.kode,
+    required this.sektor,
+    required this.blok,
 
     required this.target,
     this.realisasi,
@@ -30,6 +34,8 @@ class Aktivitas{
 
       'jenis': jenis,
       'kode': kode,
+      'sektor': sektor,
+      'blok': blok,
 
       'target': target,
       'realisasi': realisasi,
@@ -42,6 +48,8 @@ class Aktivitas{
         tanggal = doc.data()!["tanggal"],
         jenis = doc.data()!["jenis"],
         kode = doc.data()!["kode"],
+        sektor = doc.data()!["sektor"],
+        blok = doc.data()!["blok"],
 
         target = doc.data()!["target"],
         realisasi = doc.data()!["realisasi"],

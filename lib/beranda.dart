@@ -1,12 +1,12 @@
 import 'package:buku_kerja_mandor/application_drawer.dart';
-import 'package:buku_kerja_mandor/kalendar.dart';
+import 'package:buku_kerja_mandor/kalender.dart';
 import 'package:buku_kerja_mandor/lihat_tim.dart';
 import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'drawer.dart';
 import 'bkm.dart';
-import 'kalendar.dart';
+import 'kalender.dart';
 import 'rencana_kerja_harian.dart';
 import 'lihat_tim.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -80,7 +80,7 @@ class MenuButton extends StatelessWidget {
           Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(4);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Kalendar()),
+            MaterialPageRoute(builder: (context) => Kalender()),
           );
         }
       },

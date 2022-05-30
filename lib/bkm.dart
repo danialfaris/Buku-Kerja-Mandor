@@ -90,8 +90,6 @@ class _BKMState extends State<BKM> {
                                           child: ListTile(
                                             title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}",
                                               style: TextStyle(fontSize: 20)),
-                                            subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}",
-                                                style: TextStyle(fontSize: 20)),
                                           )
                                       )
                                     ],

@@ -51,40 +51,6 @@ class LaporAktivitas extends StatelessWidget {
                 onTap: () {
                 },
               ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              ListTile(
-                title:
-                Text('Sektor',
-                    style: TextStyle(color: Color(0xFF757575))),
-                subtitle:
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                    Text(args.sektor,
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                  ],
-                ),
-                onTap: () {
-                },
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              ListTile(
-                title:
-                Text('Blok',
-                    style: TextStyle(color: Color(0xFF757575))),
-                subtitle:
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                    Text(args.blok,
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                  ],
-                ),
-                onTap: () {
-                },
-              ),
               ListTile(
                 title:
                 Text('Target Ha',
@@ -190,8 +156,6 @@ class LaporAktivitas extends StatelessWidget {
                         tanggal: args.tanggal,
                         jenis: args.jenis,
                         kode: args.kode,
-                        sektor: args.sektor,
-                        blok: args.blok,
                         target: args.target,
                         realisasi: int.parse(_realisasi.text),
                         liter: args.jenis == "Penyemprotan" ? int.parse(_liter.text) : args.liter,

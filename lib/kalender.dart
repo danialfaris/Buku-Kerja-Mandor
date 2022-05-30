@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 
 import 'models/activity_model.dart';
 
-class Kalendar extends StatefulWidget{
+class Kalender extends StatefulWidget{
   @override
-  _KalendarState createState() => _KalendarState();
+  _KalenderState createState() => _KalenderState();
 }
 
-class _KalendarState extends State<Kalendar> {
+class _KalenderState extends State<Kalender> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
@@ -46,7 +46,7 @@ class _KalendarState extends State<Kalendar> {
       drawer: MyDrawer(),
       appBar: AppBar(
         title: Text(
-          "Kalendar",
+          "Kalender",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -54,7 +54,7 @@ class _KalendarState extends State<Kalendar> {
         calendarBuilders: CalendarBuilders(
           dowBuilder: (context, day) {
             if (day.weekday == DateTime.sunday) {
-              final text = 'M';
+              final text = 'Mgu';
               return Center(
                 child: Text(
                   text,
@@ -62,7 +62,7 @@ class _KalendarState extends State<Kalendar> {
                 ),
               );
             }
-            var days = ['S','S','R','K','J','S'];
+            var days = ['Sen','Sel','Rab','Kam','Jum','Sab'];
             final text = days[day.weekday - DateTime.monday];
             return Center(
               child: Text(
@@ -79,8 +79,11 @@ class _KalendarState extends State<Kalendar> {
             shape: BoxShape.circle,
           ),
           selectedDecoration: BoxDecoration (
+            color: myColor,
+            shape: BoxShape.circle,
           ),
           selectedTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          weekendTextStyle: TextStyle(color: Colors.red),
         ),
         headerStyle: HeaderStyle(
           titleCentered: true,
@@ -92,6 +95,9 @@ class _KalendarState extends State<Kalendar> {
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: _focusedDay,
         startingDayOfWeek: StartingDayOfWeek.monday,
+        weekendDays: [DateTime.sunday],
+
+
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.
@@ -141,7 +147,6 @@ class _KalendarState extends State<Kalendar> {
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
-                                        subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
                                         onTap: () {
                                           Navigator.pushNamed(
                                               context,
@@ -265,7 +270,6 @@ class _RKHState extends State<RKH> {
                             itemBuilder: (context, index) {
                               return ListTile(
                                 title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
-                                subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
                                 onTap: () {
                                   Navigator.pushNamed(
                                       context,

@@ -71,39 +71,6 @@ class TabAktivitas extends StatelessWidget {
           onTap: () {
           },
         ),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-        ListTile(
-          title:
-          Text('Sektor',
-              style: TextStyle(color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text(args.sektor,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title:
-          Text('Blok',
-              style: TextStyle(color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text(args.blok,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ),
         ListTile(
           title:
           Text('Target',
@@ -120,7 +87,6 @@ class TabAktivitas extends StatelessWidget {
           onTap: () {
           },
         ),
-        args.realisasi != null ?
         ListTile(
           title:
           Text('Realisasi',
@@ -130,14 +96,15 @@ class TabAktivitas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+              args.realisasi != null ?
               Text("${args.realisasi} Ha",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))) :
+              Text("Belum diisi"),
             ],
           ),
           onTap: () {
           },
-        ): SizedBox(),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+        ),
       ],
     );
   }

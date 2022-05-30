@@ -80,7 +80,6 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                         itemBuilder: (context, index) {
                           return ListTile(
                             title: Text("${listTerambil![index].kode} - ${listTerambil![index].jenis}"),
-                            subtitle: Text("${listTerambil![index].sektor}${listTerambil![index].blok}"),
                             onTap: () {
                               Navigator.pushNamed(
                                   context,

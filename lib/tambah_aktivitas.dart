@@ -62,6 +62,7 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                       icon: const Icon(Icons.arrow_downward),
                       items: <String>[
                         'Pilih Aktivitas',
+                        'Panen',
                         'Pembabatan',
                         'Pembuatan Tangga Panen',
                         'Pemeliharaan Jalan',
@@ -201,8 +202,6 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                                 tanggal: dateinput.text,
                                 jenis: dropdownValue,
                                 kode: _Kode.text,
-                                sektor: _Sektor.text,
-                                blok: _Blok.text,
                                 target: int.parse(_Target.text)
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
