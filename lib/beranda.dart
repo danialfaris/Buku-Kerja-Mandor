@@ -32,8 +32,8 @@ class Beranda extends StatelessWidget {
         width: double.maxFinite,
         child: ListView(
             children: <Widget>[
-              MenuButton(0),
-              SizedBox(height: 10),
+              //MenuButton(0),
+              //SizedBox(height: 10),
               MenuButton(1),
               SizedBox(height: 10),
               MenuButton(2),
@@ -55,6 +55,7 @@ class MenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        /**
         if(num == 0) {
           Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(1);
           Navigator.push(
@@ -62,6 +63,7 @@ class MenuButton extends StatelessWidget {
             MaterialPageRoute(builder: (context) => BKM()),
           );
         }
+            **/
         if(num == 1) {
           Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(2);
           Navigator.push(

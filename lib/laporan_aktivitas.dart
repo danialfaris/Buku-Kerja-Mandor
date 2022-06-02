@@ -60,7 +60,7 @@ class LaporAktivitas extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                    Text("${args.target.toDouble()} Ha",
+                    Text("${args.target?.toDouble()} Ha",
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                   ],
                 ),
@@ -71,6 +71,10 @@ class LaporAktivitas extends StatelessWidget {
               Divider(thickness: 10),
               ListTile(
                 title: Row(
+
+
+
+
                   children: [
                     Text('Realisasi ha', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],

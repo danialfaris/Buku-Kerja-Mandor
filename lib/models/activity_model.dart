@@ -7,7 +7,7 @@ class Aktivitas{
   final String jenis;
   final String kode;
 
-  final int target;
+  final int? target;
   final int? realisasi;
   final int? liter;
 
@@ -18,7 +18,7 @@ class Aktivitas{
     required this.jenis,
     required this.kode,
 
-    required this.target,
+    this.target,
     this.realisasi,
     this.liter,
   });

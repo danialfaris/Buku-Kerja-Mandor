@@ -8,7 +8,7 @@ import 'laporan_aktivitas.dart';
 import 'drawer.dart';
 import 'models/activity_model.dart';
 import 'package:intl/intl.dart';
-
+/**
 class BKM extends StatefulWidget {
   const BKM({Key? key}) : super (key: key);
 
@@ -148,3 +148,4 @@ class _BKMState extends State<BKM> {
       );
     }
 }
+    **/

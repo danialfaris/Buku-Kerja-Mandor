@@ -5,12 +5,14 @@ import 'package:buku_kerja_mandor/tambah_aktivitas.dart';
 import 'package:buku_kerja_mandor/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'lapor_panen.dart';
 import 'login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'application_drawer.dart';
+import 'models/activity_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

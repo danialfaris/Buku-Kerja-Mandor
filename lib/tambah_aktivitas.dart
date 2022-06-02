@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'main.dart';
+import 'models/panen_model.dart';
 import 'services/database_service.dart';
 
 class TambahAktivitas extends StatefulWidget{
@@ -35,8 +36,6 @@ class _TambahAktivitas extends State<TambahAktivitas> {
   Widget build(BuildContext context) {
     Provider.of<FormProvider> (context);
     TextEditingController _Kode = TextEditingController();
-    TextEditingController _Sektor = TextEditingController();
-    TextEditingController _Blok = TextEditingController();
     TextEditingController _Target = TextEditingController();
 
     const ctext = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
@@ -113,80 +112,44 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                     ),
 
                     const SizedBox(height: 10.0),
-                    const Text('Kode', style: ctext),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      controller: _Kode,
-                      keyboardType: TextInputType.text,
-                      decoration: new InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    if(dropdownValue != "Panen")...[
+                      const Text('Kode', style: ctext),
+                      const SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: _Kode,
+                        keyboardType: TextInputType.text,
+                        decoration: new InputDecoration(
+                          enabledBorder: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Masukkan Kode';
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Masukkan Kode';
-                        }
-                        return null;
-                      },
-                    ),
-                    Divider(),
+                      Divider(),
 
-                    const SizedBox(height: 10.0),
-                    const Text('Sektor', style: ctext),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      controller: _Sektor,
-                      keyboardType: TextInputType.text,
-                      decoration: new InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      const SizedBox(height: 10.0),
+                      const Text('Target', style: ctext),
+                      const SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: _Target,
+                        keyboardType: TextInputType.number,
+                        decoration: new InputDecoration(
+                          enabledBorder: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Masukkan Target';
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Masukkan Sektor';
-                        }
-                        return null;
-                      },
-                    ),
-                    Divider(),
-
-                    const SizedBox(height: 10.0),
-                    const Text('Blok', style: ctext),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      controller: _Blok,
-                      keyboardType: TextInputType.text,
-                      decoration: new InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Masukkan Blok';
-                        }
-                        return null;
-                      },
-                    ),
-                    Divider(),
-
-                    const SizedBox(height: 10.0),
-                    const Text('Target', style: ctext),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      controller: _Target,
-                      keyboardType: TextInputType.number,
-                      decoration: new InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Masukkan Target';
-                        }
-                        return null;
-                      },
-                    ),
-                    Divider(),
+                      Divider(),
+                    ],
 
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -198,16 +161,28 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                             // If the form is valid, display a snackbar. In the real world,
                             // you'd often call a server or save the information in a database.
                             DatabaseService service = DatabaseService();
-                            Aktivitas aktivitas = Aktivitas(
-                                tanggal: dateinput.text,
-                                jenis: dropdownValue,
-                                kode: _Kode.text,
-                                target: int.parse(_Target.text)
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Memproses Data')),
-                            );
-                            await service.tambahAktivitas(aktivitas);
+                            if(dropdownValue == "Panen"){
+                              AktivitasPanen aktivitas = AktivitasPanen(
+                                  tanggal: dateinput.text,
+                                  jenis: dropdownValue,
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Memproses Data')),
+                              );
+                              await service.tambahAktivitasPanen(aktivitas);
+                            }
+                            else{
+                              Aktivitas aktivitas = Aktivitas(
+                                  tanggal: dateinput.text,
+                                  jenis: dropdownValue,
+                                  kode: _Kode.text,
+                                  target: int.parse(_Target.text)
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Memproses Data')),
+                              );
+                              await service.tambahAktivitas(aktivitas);
+                            }
                             Navigator.pop(context);
                           }
                         },

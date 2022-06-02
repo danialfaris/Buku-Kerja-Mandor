@@ -61,6 +61,7 @@ class MyDrawer extends StatelessWidget {
                     );
                   },
                 ),
+                /**
                 ListTile(
                   tileColor: currentDrawer == 1 ? Color(0xFFC8E6C9) : Color(0x00000000),
                   title: Row(
@@ -82,6 +83,7 @@ class MyDrawer extends StatelessWidget {
                     );
                   },
                 ),
+                    **/
                 ListTile(
                   tileColor: currentDrawer == 2 ? Color(0xFFC8E6C9) : Color(0x00000000),
                   title: Row(
