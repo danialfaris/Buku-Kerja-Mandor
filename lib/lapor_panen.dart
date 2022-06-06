@@ -42,7 +42,7 @@ class _LaporPanen extends State<LaporPanen> {
 
   Future<void> _initRetrieval() async {
     List<HasilKerja> retrieved = await service.ambilHasilKerja(args.id!, karyawan.id);
-    print(retrieved[0]);
+    print(retrieved.length);
     hasilKerja = retrieved[0];
   }
 

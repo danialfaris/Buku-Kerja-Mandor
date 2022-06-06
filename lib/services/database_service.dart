@@ -24,7 +24,7 @@ class DatabaseService{
         .instance.collection('Aktivitas')
         .where('kode', isEqualTo: aktivitasData.kode)
         .get();
-    QueryDocumentSnapshot doc = querySnap.docs[0];  // Assumption: the query returns only one document, THE doc you are looking for.
+    QueryDocumentSnapshot doc = querySnap.docs[0];
     DocumentReference docRef = doc.reference;
     await docRef.update(aktivitasData.toMap());
   }
@@ -34,7 +34,7 @@ class DatabaseService{
         .instance.collection('AktivitasPanen')
         .where('id', isEqualTo: aktivitas.id)
         .get();
-    QueryDocumentSnapshot doc = querySnap.docs[0];  // Assumption: the query returns only one document, THE doc you are looking for.
+    QueryDocumentSnapshot doc = querySnap.docs[0];
     DocumentReference docRef = doc.reference;
     await docRef.update({
       "hasilKerja.$KaryawanId.tahun": args.tahun,
@@ -94,8 +94,11 @@ class DatabaseService{
   }
 
   Future<List<HasilKerja>> ambilHasilKerja(String AktivitasId, String KaryawanId) async {
+    print(AktivitasId);
+    print(KaryawanId);
     QuerySnapshot<Map<String, dynamic>> snapshot =
-    await _db.collection("AktivitasPanen.$AktivitasId.hasilKerja").get();
+    await _db.collection("AktivitasPanen.$AktivitasId.hasilKerja.$KaryawanId.blok").get();
+
     return snapshot.docs
         .map((docSnapshot) => HasilKerja.fromDocumentSnapshot(docSnapshot))
         .toList();
