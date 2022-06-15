@@ -1,10 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:buku_kerja_mandor/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService{
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  var uname = "";
+  String? get getEmail => _firebaseAuth.currentUser!.email;
+  String? get getUsername => uname;
+
+  setUsername(String? email) async {
+    final SharedPreferences prefs = await _prefs;
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await _db
+        .collection('akun').doc('$email').get();
+    final String username = (snapshot.data()!["username"]);
+    await prefs.setString('username', username);
+    uname = username;
+  }
 
   User? _userFromFirebase(auth.User? user){
     if (user == null){

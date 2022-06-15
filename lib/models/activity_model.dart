@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Aktivitas{
-  final String? id;
+  String? id;
+  final String mandor;
   final String tanggal;
 
   final String jenis;
@@ -13,6 +14,7 @@ class Aktivitas{
 
   Aktivitas({
     this.id,
+    required this.mandor,
     required this.tanggal,
 
     required this.jenis,
@@ -26,6 +28,7 @@ class Aktivitas{
   Map<String, dynamic> toMap(){
     return {
       'id' : id,
+      'mandor' : mandor,
       'tanggal': tanggal,
 
       'jenis': jenis,
@@ -39,6 +42,7 @@ class Aktivitas{
 
   Aktivitas.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
       : id = doc.id,
+        mandor = doc.data()!["mandor"],
         tanggal = doc.data()!["tanggal"],
         jenis = doc.data()!["jenis"],
         kode = doc.data()!["kode"],

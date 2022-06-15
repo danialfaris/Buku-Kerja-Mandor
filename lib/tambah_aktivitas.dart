@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:buku_kerja_mandor/services/auth_services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:buku_kerja_mandor/models/activity_model.dart';
@@ -34,7 +35,9 @@ class _TambahAktivitas extends State<TambahAktivitas> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     Provider.of<FormProvider> (context);
+    TextEditingController _Mandor = TextEditingController();
     TextEditingController _Kode = TextEditingController();
     TextEditingController _Target = TextEditingController();
 
@@ -110,8 +113,26 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                         }
                       },
                     ),
+                    Divider(),
 
-                    const SizedBox(height: 10.0),
+                    const Text('Nama Mandor', style: ctext),
+                    const SizedBox(height: 8.0),
+                    TextFormField(
+                      controller: _Mandor,
+                      keyboardType: TextInputType.text,
+                      decoration: new InputDecoration(
+                        enabledBorder: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Masukkan Nama Mandor';
+                        }
+                        return null;
+                      },
+                    ),
+                    Divider(),
+
                     if(dropdownValue != "Panen")...[
                       const Text('Kode', style: ctext),
                       const SizedBox(height: 8.0),
@@ -163,6 +184,7 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                             DatabaseService service = DatabaseService();
                             if(dropdownValue == "Panen"){
                               AktivitasPanen aktivitas = AktivitasPanen(
+                                  mandor: _Mandor.text,
                                   tanggal: dateinput.text,
                                   jenis: dropdownValue,
                               );
@@ -173,6 +195,7 @@ class _TambahAktivitas extends State<TambahAktivitas> {
                             }
                             else{
                               Aktivitas aktivitas = Aktivitas(
+                                  mandor: _Mandor.text,
                                   tanggal: dateinput.text,
                                   jenis: dropdownValue,
                                   kode: _Kode.text,

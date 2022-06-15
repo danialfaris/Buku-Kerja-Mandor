@@ -1,28 +1,30 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HasilKerja{
-  final String? id;
+  String? id;
   final int? tahun;
   final String? blok;
 
-  final int? luas;
+  final int? jelajah;
   final int? tandan;
   final int? kg;
-  final int? krd;
-  final int? ml;
-  final int? p;
+  final int? brd;
+  final int? jml;
+  final int? pikul;
 
   HasilKerja({
     this.id,
     this.tahun,
     this.blok,
 
-    this.luas,
+    this.jelajah,
     this.tandan,
     this.kg,
-    this.krd,
-    this.ml,
-    this.p,
+    this.brd,
+    this.jml,
+    this.pikul,
   });
 
   Map<String, dynamic> toMap(){
@@ -31,12 +33,12 @@ class HasilKerja{
       'tahun': tahun,
       'blok': blok,
 
-      'luas': luas,
+      'jelajah': jelajah,
       'tandan': tandan,
       'kg': kg,
-      'krd': krd,
-      'ml': ml,
-      'p': p,
+      'krd': brd,
+      'jml': jml,
+      'pikul': pikul,
     };
   }
 
@@ -45,11 +47,23 @@ class HasilKerja{
         tahun = doc.data()!["tahun"],
         blok = doc.data()!["blok"],
 
-        luas = doc.data()!["luas"],
+        jelajah = doc.data()!["jelajah"],
         tandan = doc.data()!["tandan"],
         kg = doc.data()!["kg"],
-        krd = doc.data()!["krd"],
-        ml = doc.data()!["ml"],
-        p = doc.data()!["p"];
+        brd = doc.data()!["brd"],
+        jml = doc.data()!["jml"],
+        pikul = doc.data()!["pikul"];
+
+  HasilKerja.fromHashMap(LinkedHashMap doc)
+      : id = doc["id"],
+        tahun = doc["tahun"],
+        blok = doc["blok"],
+
+        jelajah = doc["jelajah"],
+        tandan = doc["tandan"],
+        kg = doc["kg"],
+        brd = doc["brd"],
+        jml = doc["jml"],
+        pikul = doc["pikul"];
 
 }

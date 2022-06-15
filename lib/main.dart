@@ -15,10 +15,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'application_drawer.dart';
 import 'models/activity_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final prefs = await SharedPreferences.getInstance();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
     SystemUiOverlay.bottom
   ] );
@@ -63,7 +65,8 @@ class MyApp extends StatelessWidget {
             '/': (context) => Wrapper(),
             '/login': (context) => LoginPage(),
             '/edit' : (context) => LaporAktivitas(),
-            '/view' : (context) => LihatAktivitas(),
+            '/view' : (context) => LihatAktivitas(AktivitasPanen(mandor: '', tanggal: '', jenis: '')),
+            '/viewpemel' : (context) => LihatAktivitasPemel(),
           }
       ),
     );

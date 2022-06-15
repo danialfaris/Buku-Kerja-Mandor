@@ -163,6 +163,7 @@ class TabAktivitas extends StatelessWidget {
             // you'd often call a server or save the information in a database.
             DatabaseService service = DatabaseService();
             Aktivitas aktivitas = Aktivitas(
+              mandor: args.mandor,
               tanggal: args.tanggal,
               jenis: args.jenis,
               kode: args.kode,
@@ -171,7 +172,7 @@ class TabAktivitas extends StatelessWidget {
               liter: args.jenis == "Penyemprotan" ? int.parse(_liter.text) : args.liter,
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Memproses Data')),
+              const SnackBar(content: Text('Data berhasil disimpan')),
             );
             await service.updateAktivitas(aktivitas);
           }
@@ -245,12 +246,12 @@ class _TabAnggota extends State<TabAnggota> {
   }
 
   Future<void> _initRetrieval() async {
-    listKaryawan = service.ambilKaryawan();
-    listTerambil = await service.ambilKaryawan();
+    listKaryawan = service.ambilKaryawan('rahmat');
+    listTerambil = await service.ambilKaryawan('rahmat');
   }
 
   Future<Null> _refresh() {
-    return service.ambilKaryawan().then((_list) {
+    return service.ambilKaryawan('rahmat').then((_list) {
       setState(() => listTerambil = _list);
     });
   }

@@ -23,6 +23,7 @@ class _KalenderState extends State<Kalender> {
   List<Aktivitas>? listTerambil;
 
   void initState(){
+    _focusedDay = DateTime.now();
     super.initState();
     _initRetrieval();
   }

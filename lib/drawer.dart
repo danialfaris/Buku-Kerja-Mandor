@@ -1,5 +1,6 @@
 import 'package:buku_kerja_mandor/login.dart';
 import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
+import 'package:buku_kerja_mandor/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/auth_services.dart';
@@ -12,6 +13,7 @@ import 'lihat_tim.dart';
 import 'application_drawer.dart';
 
 class MyDrawer extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -31,7 +33,7 @@ class MyDrawer extends StatelessWidget {
                   Image.asset('images/icon.png', height: 70, width: 70,),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Text("Selamat datang, ", style: TextStyle(color: Color(0xFF757575)),),
-                  Text("RAHMAT R.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)
+                  Text("${authService.getUsername}", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)
                 ],
               ),
             ),

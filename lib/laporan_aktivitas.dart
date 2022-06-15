@@ -18,6 +18,7 @@ class LaporAktivitas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Aktivitas;
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -157,6 +158,7 @@ class LaporAktivitas extends StatelessWidget {
                     // you'd often call a server or save the information in a database.
                     DatabaseService service = DatabaseService();
                     Aktivitas aktivitas = Aktivitas(
+                        mandor: args.mandor,
                         tanggal: args.tanggal,
                         jenis: args.jenis,
                         kode: args.kode,

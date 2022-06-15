@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:buku_kerja_mandor/lapor_panen.dart';
 import 'package:buku_kerja_mandor/login.dart';
 import 'package:buku_kerja_mandor/services/auth_services.dart';
@@ -5,53 +7,76 @@ import 'package:buku_kerja_mandor/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'laporan_aktivitas.dart';
 import 'package:intl/intl.dart';
 import 'package:editable/editable.dart';
 
 import 'models/activity_model.dart';
+import 'models/hasil_kerja_model.dart';
 import 'models/karyawan_model.dart';
 import 'models/panen_model.dart';
 
-/**
+/**/
 class LihatAktivitas extends StatefulWidget {
-  LihatAktivitas({Key? key}) : super(key: key);
+  final AktivitasPanen args;
+  LihatAktivitas(this.args);
 
   @override
-  State<LihatAktivitas> createState()=>_LihatAktivitas();
+  State<LihatAktivitas> createState()=>_LihatAktivitas(args);
 }
 
 class _LihatAktivitas extends State<LihatAktivitas> {
+  final AktivitasPanen args;
+  _LihatAktivitas(this.args);
 
   DatabaseService service = DatabaseService();
   static final DateTime now = DateTime.now();
   static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
   final String formatted = formatter.format(now);
-  Future<List<Karyawan>>? listKaryawan;
-  List<Karyawan>? listTerambil;
+  List<Karyawan>? listKaryawan;
+  LinkedHashMap? listHasilKerja;
+  HasilKerja hasilKerjaTotal = HasilKerja();
   String? namaKaryawan;
   String? idKaryawan;
+  String _uname = '';
 
   void initState(){
     super.initState();
     _initRetrieval();
+    _loadName();
+  }
+
+  _loadName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _uname = prefs.getString('username') ?? '';
+    });
   }
 
   Future<void> _initRetrieval() async {
-    listKaryawan = service.ambilKaryawan();
-    listTerambil = await service.ambilKaryawan();
+    listKaryawan = await service.ambilKaryawan(_uname);
+    listHasilKerja = await service.ambilHasilKerja(args.id);
+    hasilKerjaTotal = await service.ambilHasilKerjaTotal(args.id);
+    _refresh();
   }
 
-  Future<Null> _refresh() {
-    return service.ambilKaryawan().then((_list) {
-      setState(() => listTerambil = _list);
+  Future<void> _refresh() async {
+    service.ambilKaryawan(_uname).then((_list) {
+      setState(() => listKaryawan = _list);
+    });
+    service.ambilHasilKerja(args.id).then((_list) {
+      setState(() => listHasilKerja = _list);
+    });
+    service.ambilHasilKerjaTotal(args.id).then((_hk) {
+      setState(() => hasilKerjaTotal = _hk);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as AktivitasPanen;
+    final authService = Provider.of<AuthService>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -61,19 +86,24 @@ class _LihatAktivitas extends State<LihatAktivitas> {
         elevation: 10,
       ),
       body:
-      TablePage(),
-      /**
       Container(
         padding: EdgeInsets.fromLTRB(15,15,15,10),
         height: 1200,
         width: double.maxFinite,
         child: ListView(
+          shrinkWrap: true,
             children: <Widget>[
+              Text("Mandor: $_uname", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              SizedBox(height: 10),
+              Text("Tanggal: ${args.tanggal}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              SizedBox(height: 10),
+              Divider(),
+              SizedBox(height: 10,),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Table(
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  defaultColumnWidth: FixedColumnWidth(75.0),
+                  defaultColumnWidth: FixedColumnWidth(80.0),
                   border: TableBorder.all(
                       color: Colors.black,
                       style: BorderStyle.solid,
@@ -91,71 +121,133 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                       Column(children:[Text('Jml', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center)]),
                       Column(children:[Text('Pikul', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center)]),
                     ]),
+                    if (listKaryawan != null)
+                      for (var o in listKaryawan! ) (
+                        TableRow( children: [
+                          Column(children:[Text(o.id)]),
+                          Column(children:[Text(o.nama)]),
+                          Column(children:[Text('thn')]),
+                          Column(children:[
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black
+                              ),
+                              initialValue: listHasilKerja![o.id]["blok"],
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                listHasilKerja![o.id]["blok"] = value;
+                              },
+                            ),
+                          ]),
+                          Column(children:[
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black
+                              ),
+                              initialValue: listHasilKerja![o.id]["jelajah"].toString(),
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                listHasilKerja![o.id]["jelajah"] = value;
+                              },
+                            ),
+                          ]),
+                          Column(children:[
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black
+                              ),
+                              initialValue: listHasilKerja![o.id]["tandan"].toString(),
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                listHasilKerja![o.id]["tandan"] = value;
+                              },
+                            ),
+                          ]),
+                          Column(children:[Text('${listHasilKerja![o.id]["kg"]}')]),
+                          Column(children:[
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black
+                              ),
+                              initialValue: listHasilKerja![o.id]["brd"].toString(),
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                listHasilKerja![o.id]["brd"] = value;
+                              },
+                            ),
+                          ]),
+                          Column(children:[Text('${listHasilKerja![o.id]["jml"]}')]),
+                          Column(children:[
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black
+                              ),
+                              initialValue: listHasilKerja![o.id]["pikul"].toString(),
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                listHasilKerja![o.id]["pikul"] = value;
+                              },
+                            ),
+                          ]),
+                        ])
+                      ),
                     TableRow( children: [
-                      Column(children:[Text('1')]),
-                      Column(children:[Text('Edi')]),
-                      Column(children:[Text('thn')]),
-                      Column(children:[
-                        TextFormField(
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black
-                          ),
-                          decoration: new InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          ),
-                        ),
-                      ]),
+                      Column(children:[Text('Total', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center)]),
                       Column(children:[Text('')]),
                       Column(children:[Text('')]),
                       Column(children:[Text('')]),
-                      Column(children:[Text('')]),
-                      Column(children:[Text('')]),
-                      Column(children:[Text('')]),
+                      Column(children:[Text(hasilKerjaTotal.jelajah.toString())]),
+                      Column(children:[Text(hasilKerjaTotal.tandan.toString())]),
+                      Column(children:[Text(hasilKerjaTotal.kg.toString())]),
+                      Column(children:[Text(hasilKerjaTotal.brd.toString())]),
+                      Column(children:[Text(hasilKerjaTotal.jml.toString())]),
+                      Column(children:[Text(hasilKerjaTotal.pikul.toString())]),
                     ]),
                   ],
                 ),
               ),
             ]
         ),
-      ),**/
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          //service.ambilAktivitasPanen(args.id);
+          print("send $listHasilKerja");
+          await service.updateHasilKerjaSemua(args.id,listHasilKerja!);
+          _refresh();
+        },
+        child: const Icon(Icons.save),
+      ),
     );
   }
 }
 
-class TablePage extends StatefulWidget {
-  @override
-  _TablePageState createState() => _TablePageState();
-}
-
-class _TablePageState extends State<TablePage> {
-
-  List headers = [
-    {"title":'ID', 'index': 1, 'key':'id'},
-    {"title":'Nama', 'index': 2, 'key':'nama'},
-  ];
-  List rows = [
-    {"ID":'1', "Nama":'Edi'}
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Editable(
-          columns: headers,
-          rows: rows,
-          tdStyle: TextStyle(fontSize: 20),
-          showSaveIcon: false,
-          borderColor: Colors.grey.shade300,
-        ),
-    );
-  }
-}
- **/
-
-/**/
+/**
 class LihatAktivitas extends StatelessWidget {
   LihatAktivitas({Key? key}) : super(key: key);
   DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'in_ID');
@@ -418,4 +510,4 @@ class _TabAnggota extends State<TabAnggota> {
   }
 }
 
-    /**/
+    **/

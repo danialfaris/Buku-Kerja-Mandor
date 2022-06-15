@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'laporan_aktivitas.dart';
 import 'drawer.dart';
+import 'lihat_aktivitas.dart';
 import 'main.dart';
 import 'models/activity_model.dart';
 import 'package:intl/intl.dart';
@@ -14,30 +15,40 @@ class RencanaKerjaHarian extends StatefulWidget {
   const RencanaKerjaHarian({Key? key}) : super (key: key);
 
   @override
-  State<RencanaKerjaHarian> createState()=>_RencanaKerjaHarianState();
+  State<RencanaKerjaHarian> createState() => _RencanaKerjaHarianState();
 }
 
 class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
   DatabaseService service = DatabaseService();
-  static final DateTime now = DateTime.now();
+  static DateTime now = DateTime.now();
   static final DateFormat formatter = DateFormat('dd MMMM yyyy', 'in_ID');
-  final String formatted = formatter.format(now);
+  String formatted = formatter.format(now);
   Future<List<AktivitasPanen>>? listAktivitas;
+  Future<List<Aktivitas>>? listAktivitasPemel;
   List<AktivitasPanen>? listTerambil;
+  List<Aktivitas>? listTerambilPemel;
 
   void initState(){
+    now = DateTime.now();
+    formatted = formatter.format(now);
     super.initState();
     _initRetrieval();
+    _refresh();
   }
 
   Future<void> _initRetrieval() async {
     listAktivitas = service.ambilAktivitasPanenHari(formatted);
+    listAktivitasPemel = service.ambilAktivitasHari(formatted);
     listTerambil = await service.ambilAktivitasPanenHari(formatted);
+    listTerambilPemel = await service.ambilAktivitasHari(formatted);
   }
 
-  Future<Null> _refresh() {
-    return service.ambilAktivitasPanenHari(formatted).then((_list) {
+  Future<void> _refresh() async {
+    service.ambilAktivitasPanenHari(formatted).then((_list) {
       setState(() => listTerambil = _list);
+    });
+    service.ambilAktivitasHari(formatted).then((_list) {
+      setState(() => listTerambilPemel = _list);
     });
   }
 
@@ -55,7 +66,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
           // action button
           IconButton(
             icon: Icon(Icons.refresh, size: 30),
-            onPressed: () { },
+            onPressed: _refresh,
           ),
         ],
       ),
@@ -97,17 +108,83 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                                   ],
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(
+                                  Navigator.push(
                                       context,
-                                      "/view",
-                                      arguments: listTerambil![index])
-                                      .then(
+                                      MaterialPageRoute(builder:
+                                          (context) => LihatAktivitas(listTerambil![index])
+                                      )
+                                  ).then(
                                           (context) => _refresh());
                                 },
                               );
                             });
                       } else if (snapshot.connectionState == ConnectionState.done &&
                           listTerambil!.isEmpty) {
+                        return Center(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: const <Widget>[
+                              SizedBox(height: 20),
+                              Align(alignment: AlignmentDirectional.center,
+                                  child: Text('Data tidak ditemukan', style: TextStyle(fontSize: 20))),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+
+              SizedBox(height: 5),
+              RefreshIndicator(
+                onRefresh: _refresh,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: FutureBuilder(
+                    future: listAktivitasPemel,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<List<Aktivitas>> snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: listTerambilPemel!.length,
+                            separatorBuilder: (context, index) => const Divider(),
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Row(
+                                  children: [
+                                    listTerambilPemel![index].realisasi == null ?
+                                    Icon(Icons.radio_button_unchecked) :
+                                    Icon(Icons.radio_button_checked, color: myColor),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                        child: ListTile(
+                                          title: Text(
+                                              "${listTerambilPemel![index].jenis}",
+                                              style: TextStyle(fontSize: 20)),
+                                        )
+                                    )
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context,
+                                      "/viewpemel",
+                                      arguments: listTerambilPemel![index])
+                                      .then(
+                                          (context) => _refresh());
+                                },
+                              );
+                            });
+                      } else if (snapshot.connectionState == ConnectionState.done &&
+                          listTerambilPemel!.isEmpty) {
                         return Center(
                           child: ListView(
                             scrollDirection: Axis.vertical,

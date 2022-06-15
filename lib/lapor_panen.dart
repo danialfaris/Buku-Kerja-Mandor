@@ -8,7 +8,7 @@ import 'bkm.dart';
 import 'package:intl/intl.dart';
 import 'models/activity_model.dart';
 import 'models/panen_model.dart';
-
+/**
 class LaporPanen extends StatefulWidget {
   final AktivitasPanen args;
   final Karyawan karyawan;
@@ -30,9 +30,9 @@ class _LaporPanen extends State<LaporPanen> {
   TextEditingController _jelajah = TextEditingController();
   TextEditingController _tdn = TextEditingController();
   TextEditingController _kg = TextEditingController();
-  TextEditingController _krd = TextEditingController();
-  TextEditingController _ml = TextEditingController();
-  TextEditingController _p = TextEditingController();
+  TextEditingController _brd = TextEditingController();
+  TextEditingController _jml = TextEditingController();
+  TextEditingController _pikul = TextEditingController();
   HasilKerja hasilKerja = HasilKerja();
 
   void initState(){
@@ -184,7 +184,7 @@ class _LaporPanen extends State<LaporPanen> {
                     padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      controller: _krd,
+                      controller: _brd,
                       style: TextStyle(
                           fontSize: 15.0,
                           color: Colors.black
@@ -192,12 +192,12 @@ class _LaporPanen extends State<LaporPanen> {
                       decoration: new InputDecoration(
                         enabledBorder: OutlineInputBorder(
                         ),
-                        hintText: hasilKerja.krd == null ? 'Kg' : "${hasilKerja.krd}",
+                        hintText: hasilKerja.brd == null ? 'Kg' : "${hasilKerja.brd}",
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Masukkan jumlah Berondong yang terkumpulkan.';
+                          return 'Masukkan jumlah Brondol yang terkumpulkan.';
                         }
                         return null;
                       },
@@ -214,7 +214,7 @@ class _LaporPanen extends State<LaporPanen> {
                     padding: const EdgeInsets.only(bottom: 10, right: 150, left: 20),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      controller: _p,
+                      controller: _pikul,
                       style: TextStyle(
                           fontSize: 15.0,
                           color: Colors.black
@@ -222,7 +222,7 @@ class _LaporPanen extends State<LaporPanen> {
                       decoration: new InputDecoration(
                         enabledBorder: OutlineInputBorder(
                         ),
-                        hintText: hasilKerja.p == null ? 'Kg' : "${hasilKerja.p}",
+                        hintText: hasilKerja.pikul == null ? 'Kg' : "${hasilKerja.pikul}",
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
                       validator: (value) {
@@ -251,8 +251,8 @@ class _LaporPanen extends State<LaporPanen> {
                           blok: _blok.text,
                           luas: int.parse(_jelajah.text),
                           tandan: int.parse(_tdn.text),
-                          krd: int.parse(_krd.text),
-                          p: int.parse(_p.text),
+                          brd: int.parse(_brd.text),
+                          pikul: int.parse(_pikul.text),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Memproses Data')),
@@ -268,3 +268,5 @@ class _LaporPanen extends State<LaporPanen> {
     );
   }
 }
+
+    **/
