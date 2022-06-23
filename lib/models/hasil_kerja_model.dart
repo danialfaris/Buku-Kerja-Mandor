@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HasilKerja{
   String? id;
-  final int? tahun;
+  final String? tahun;
   final String? blok;
 
   final int? jelajah;

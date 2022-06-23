@@ -9,7 +9,7 @@ import 'models/karyawan_model.dart';
 
 class LihatAktivitasPemel extends StatelessWidget {
   LihatAktivitasPemel({Key? key}) : super(key: key);
-  DateFormat dateFormat = DateFormat('dd MMMM yyyy');
+  DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'in_ID');
   static const routeName = '/view';
 
   @override
@@ -18,13 +18,12 @@ class LihatAktivitasPemel extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: myColor),
       home: DefaultTabController(
-        length: args.jenis == "Penyemprotan" ? 3 : 2,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(
               tabs: [
                 Tab(text: "Aktivitas"),
-                if (args.jenis == "Penyemprotan") Tab(text: "Material"),
                 Tab(text: "Anggota"),
               ],
             ),
@@ -38,7 +37,6 @@ class LihatAktivitasPemel extends StatelessWidget {
           body: TabBarView(
             children: [
               TabAktivitas(args),
-              if (args.jenis == "Penyemprotan") TabMaterial(args),
               TabAnggota(args),
             ],
           ),
@@ -65,6 +63,20 @@ class TabAktivitas extends StatelessWidget {
             const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
             ListTile(
               title:
+              Text('Mandor',
+                  style: TextStyle(color: Color(0xFF757575))),
+              subtitle:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                  Text("${args.mandor}",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
+                ],
+              ),
+            ),
+            ListTile(
+              title:
               Text('Aktivitas',
                   style: TextStyle(color: Color(0xFF757575))),
               subtitle:
@@ -76,8 +88,6 @@ class TabAktivitas extends StatelessWidget {
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                 ],
               ),
-              onTap: () {
-              },
             ),
             ListTile(
               title:
@@ -92,13 +102,12 @@ class TabAktivitas extends StatelessWidget {
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF757575))),
                 ],
               ),
-              onTap: () {
-              },
             ),
+            Divider(),
             ListTile(
               title:
               Text('Realisasi (Ha)',
-                  style: TextStyle(color: Color(0xFF757575))),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               subtitle:
               Padding(
                   padding: const EdgeInsets.only(bottom: 10, right: 200),
@@ -126,18 +135,32 @@ class TabAktivitas extends StatelessWidget {
                           },
                         ),
                       ),
-                      if(args.jenis == "Penyemprotan")
+                    ],
+                  )
+              ),
+            ),
+            if(args.jenis == "Penyemprotan")
+            ListTile(
+              title:
+              Text('Penggunaan Bahan',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle:
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 10, right: 200),
+                  child: Row(
+                    children: [
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            controller: _liter,
+                            controller: args.liter == null
+                                ? _liter
+                                : (_liter..text = args.liter.toString()),
                             style: TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.black
                             ),
-                            initialValue: args.liter.toString(),
                             decoration: new InputDecoration(
-                              hintText: args.liter == null ? 'Belum Diisi' : "${args.realisasi}",
+                              hintText: args.liter == null ? 'Belum Diisi' : "${args.liter}",
                               contentPadding: EdgeInsets.symmetric(horizontal: 10),
                             ),
                             validator: (value) {
@@ -179,42 +202,6 @@ class TabAktivitas extends StatelessWidget {
         },
         child: const Icon(Icons.save),
       ),
-    );
-  }
-}
-
-class TabMaterial extends StatelessWidget {
-  final Aktivitas args;
-  TabMaterial(this.args);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-        args.jenis == "Penyemprotan" ?
-        ListTile(
-          title:
-          Text('Knapsack Sprayer INTER',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-          subtitle:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              Text('Kuantitas',
-                  style: TextStyle(color: Color(0xFF757575))),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              args.liter == null ? Text("Belum terisi") :
-              Text("${args.liter} liter",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-            ],
-          ),
-          onTap: () {
-          },
-        ): SizedBox(),
-        Divider(),
-      ],
     );
   }
 }

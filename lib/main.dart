@@ -65,7 +65,6 @@ class MyApp extends StatelessWidget {
             '/': (context) => Wrapper(),
             '/login': (context) => LoginPage(),
             '/edit' : (context) => LaporAktivitas(),
-            '/view' : (context) => LihatAktivitas(AktivitasPanen(mandor: '', tanggal: '', jenis: '')),
             '/viewpemel' : (context) => LihatAktivitasPemel(),
           }
       ),

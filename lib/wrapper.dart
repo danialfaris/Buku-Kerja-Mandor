@@ -15,9 +15,7 @@ class Wrapper extends StatelessWidget{
         builder: (_, AsyncSnapshot<User?> snapshot){
           if (snapshot.connectionState == ConnectionState.active){
             final User? user = snapshot.data;
-            print(user?.email);
-            authService.setUsername(user?.email);
-            print(authService.getUsername);
+            if (user != null) authService.setUsername(user.email);
             return user == null ? LoginPage() : Beranda();
           } else {
             return Scaffold(

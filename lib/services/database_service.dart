@@ -155,6 +155,12 @@ class DatabaseService{
         .collection('AktivitasPanen')
         .where('id', isEqualTo: aktivitasId)
         .get();
+    print("before");
+    DocumentSnapshot tahunTanam = await _db
+        .collection('DataSawit')
+        .doc('tahuntanam')
+        .get();
+    print("after");
     QueryDocumentSnapshot doc = querySnap.docs[0];
     DocumentReference docRef = doc.reference;
     num totalJelajah = 0;
@@ -172,9 +178,11 @@ class DatabaseService{
       totalKg = totalKg + kg;
       totalJml = totalJml + int.parse(args[o]['jml'].toString());
       totalPikul = totalPikul + int.parse(args[o]['pikul'].toString());
+      if(args[o]['blok'] == null) args[o]['blok'] = "";
 
       await docRef.update({
-        "hasilKerja.$o.tahun": args[o]['tahun'],
+        if (args[o]['blok'] != null && args[o]['blok'].isNotEmpty) "hasilKerja.$o.tahun": tahunTanam[args[o]['blok']]
+        else "hasilKerja.$o.tahun": "",
         "hasilKerja.$o.blok": args[o]['blok'],
         "hasilKerja.$o.jelajah": args[o]['jelajah'],
         "hasilKerja.$o.tandan": args[o]['tandan'],

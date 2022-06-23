@@ -40,30 +40,21 @@ class _LihatAktivitas extends State<LihatAktivitas> {
   HasilKerja hasilKerjaTotal = HasilKerja();
   String? namaKaryawan;
   String? idKaryawan;
-  String _uname = '';
 
   void initState(){
     super.initState();
     _initRetrieval();
-    _loadName();
-  }
-
-  _loadName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _uname = prefs.getString('username') ?? '';
-    });
   }
 
   Future<void> _initRetrieval() async {
-    listKaryawan = await service.ambilKaryawan(_uname);
+    listKaryawan = await service.ambilKaryawan(args.mandor);
     listHasilKerja = await service.ambilHasilKerja(args.id);
     hasilKerjaTotal = await service.ambilHasilKerjaTotal(args.id);
     _refresh();
   }
 
   Future<void> _refresh() async {
-    service.ambilKaryawan(_uname).then((_list) {
+    service.ambilKaryawan(args.mandor).then((_list) {
       setState(() => listKaryawan = _list);
     });
     service.ambilHasilKerja(args.id).then((_list) {
@@ -93,7 +84,7 @@ class _LihatAktivitas extends State<LihatAktivitas> {
         child: ListView(
           shrinkWrap: true,
             children: <Widget>[
-              Text("Mandor: $_uname", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Text("Mandor: ${args.mandor}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               SizedBox(height: 10),
               Text("Tanggal: ${args.tanggal}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               SizedBox(height: 10),
@@ -126,10 +117,10 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                         TableRow( children: [
                           Column(children:[Text(o.id)]),
                           Column(children:[Text(o.nama)]),
-                          Column(children:[Text('thn')]),
+                          Column(children:[Text(listHasilKerja![o.id]["tahun"])]),
                           Column(children:[
                             TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 15.0,
@@ -239,6 +230,9 @@ class _LihatAktivitas extends State<LihatAktivitas> {
           //service.ambilAktivitasPanen(args.id);
           print("send $listHasilKerja");
           await service.updateHasilKerjaSemua(args.id,listHasilKerja!);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Menyimpan Laporan...')),
+          );
           _refresh();
         },
         child: const Icon(Icons.save),

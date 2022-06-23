@@ -66,7 +66,12 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
           // action button
           IconButton(
             icon: Icon(Icons.refresh, size: 30),
-            onPressed: _refresh,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TambahAktivitas()),
+              ).then((context) => _refresh());
+            },
           ),
         ],
       ),
@@ -139,9 +144,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-
-              SizedBox(height: 5),
+              Divider(),
               RefreshIndicator(
                 onRefresh: _refresh,
                 child: Padding(
@@ -167,7 +170,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                                     Expanded(
                                         child: ListTile(
                                           title: Text(
-                                              "${listTerambilPemel![index].jenis}",
+                                              "${listTerambilPemel![index].kode} - ${listTerambilPemel![index].jenis}",
                                               style: TextStyle(fontSize: 20)),
                                         )
                                     )
@@ -206,7 +209,7 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
               ),
               SizedBox(height: 10),
 
-              /**/
+              /**
               ListTile(
                 tileColor: Color(0xFFC8E6C9),
                 title: Row(
@@ -219,10 +222,10 @@ class _RencanaKerjaHarianState extends State<RencanaKerjaHarian> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TambahAktivitas()),
-                  ).then((context) => _refresh());
+                ).then((context) => _refresh());
                 },
               ),
-              /**/
+              **/
             ]
           ),
       ),
@@ -341,24 +344,6 @@ class _RencanaKerjaHarianPemelState extends State<RencanaKerjaHarian> {
                 ),
               ),
               SizedBox(height: 10),
-
-              /**
-              ListTile(
-                tileColor: Color(0xFFC8E6C9),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Tambah Aktivitas', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF757575))),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TambahAktivitas()),
-                  ).then((context) => _refresh());
-                },
-              ),
-              **/
             ]
         ),
       ),
