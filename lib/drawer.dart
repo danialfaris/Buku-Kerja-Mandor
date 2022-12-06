@@ -63,29 +63,6 @@ class MyDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                /**
-                ListTile(
-                  tileColor: currentDrawer == 1 ? Color(0xFFC8E6C9) : Color(0x00000000),
-                  title: Row(
-                    children: [
-                      Icon(Icons.add),
-                      SizedBox(width: 20),
-                      Text('BKM Hari Ini'),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    if(currentDrawer == 1) return;
-                    Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(1);
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              BKM()
-                      ),
-                    );
-                  },
-                ),
-                    **/
                 ListTile(
                   tileColor: currentDrawer == 2 ? Color(0xFFC8E6C9) : Color(0x00000000),
                   title: Row(
@@ -102,7 +79,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              RencanaKerjaHarian()
+                              RencanaKerjaHarian(authService.getRole),
                       ),
                     );
                   },
@@ -134,7 +111,7 @@ class MyDrawer extends StatelessWidget {
                     children: [
                       Icon(Icons.calendar_today),
                       SizedBox(width: 20),
-                      Text('Kalendar'),
+                      Text('Kalender'),
                     ],
                   ),
                   onTap: () {
@@ -149,6 +126,7 @@ class MyDrawer extends StatelessWidget {
                     );
                   },
                 ),
+                /*
                 ListTile(
                   title: Row(
                     children: [
@@ -160,6 +138,7 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                   },
                 ),
+                */
                 ListTile(
                   title: Row(
                     children: [

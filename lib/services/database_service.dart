@@ -32,7 +32,7 @@ class DatabaseService{
     List<Karyawan> lk = await ambilKaryawan(aktivitasData.mandor);
     for (var o in lk) {
       await documentReference.update({
-        "hasilKerja.${o.id}.tahun": "",
+        "hasilKerja.${o.id}.tahun": "-",
         "hasilKerja.${o.id}.blok": "",
         "hasilKerja.${o.id}.jelajah": 0,
         "hasilKerja.${o.id}.tandan": 0,

@@ -8,16 +8,21 @@ class AuthService{
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   var uname = "";
+  var role = "";
   String? get getEmail => _firebaseAuth.currentUser!.email;
   String? get getUsername => uname;
+  String? get getRole => role;
 
-  setUsername(String? email) async {
+  setLogin(String? email) async {
     final SharedPreferences prefs = await _prefs;
     DocumentSnapshot<Map<String, dynamic>> snapshot = await _db
         .collection('akun').doc('$email').get();
     final String username = (snapshot.data()!["username"]);
+    final String urole = (snapshot.data()!["role"]);
     await prefs.setString('username', username);
+    await prefs.setString('role', urole);
     uname = username;
+    role = urole;
   }
 
   User? _userFromFirebase(auth.User? user){

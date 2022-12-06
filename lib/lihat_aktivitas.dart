@@ -115,15 +115,15 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                     if (listKaryawan != null)
                       for (var o in listKaryawan! ) (
                         TableRow( children: [
-                          Column(children:[Text(o.id)]),
-                          Column(children:[Text(o.nama)]),
-                          Column(children:[Text(listHasilKerja![o.id]["tahun"])]),
+                          Column(children:[Text(o.id, style: TextStyle(fontSize: 20.0))]),
+                          Column(children:[Text(o.nama, style: TextStyle(fontSize: 20.0))]),
+                          Column(children:[Text(listHasilKerja![o.id]["tahun"], style: TextStyle(fontSize: 20.0))]),
                           Column(children:[
                             TextFormField(
                               keyboardType: TextInputType.text,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 20.0,
                                   color: Colors.black
                               ),
                               initialValue: listHasilKerja![o.id]["blok"],
@@ -140,7 +140,7 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 20.0,
                                   color: Colors.black
                               ),
                               initialValue: listHasilKerja![o.id]["jelajah"].toString(),
@@ -157,7 +157,7 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 20.0,
                                   color: Colors.black
                               ),
                               initialValue: listHasilKerja![o.id]["tandan"].toString(),
@@ -169,13 +169,13 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                               },
                             ),
                           ]),
-                          Column(children:[Text('${listHasilKerja![o.id]["kg"]}')]),
+                          Column(children:[Text('${listHasilKerja![o.id]["kg"]}', style: TextStyle(fontSize: 20.0))]),
                           Column(children:[
                             TextFormField(
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 20.0,
                                   color: Colors.black
                               ),
                               initialValue: listHasilKerja![o.id]["brd"].toString(),
@@ -187,13 +187,13 @@ class _LihatAktivitas extends State<LihatAktivitas> {
                               },
                             ),
                           ]),
-                          Column(children:[Text('${listHasilKerja![o.id]["jml"]}')]),
+                          Column(children:[Text('${listHasilKerja![o.id]["jml"]}', style: TextStyle(fontSize: 20.0))]),
                           Column(children:[
                             TextFormField(
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 20.0,
                                   color: Colors.black
                               ),
                               initialValue: listHasilKerja![o.id]["pikul"].toString(),
@@ -229,10 +229,10 @@ class _LihatAktivitas extends State<LihatAktivitas> {
         onPressed: () async {
           //service.ambilAktivitasPanen(args.id);
           print("send $listHasilKerja");
-          await service.updateHasilKerjaSemua(args.id,listHasilKerja!);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Menyimpan Laporan...')),
           );
+          await service.updateHasilKerjaSemua(args.id,listHasilKerja!);
           _refresh();
         },
         child: const Icon(Icons.save),

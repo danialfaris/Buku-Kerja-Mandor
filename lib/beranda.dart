@@ -2,6 +2,7 @@ import 'package:buku_kerja_mandor/application_drawer.dart';
 import 'package:buku_kerja_mandor/kalender.dart';
 import 'package:buku_kerja_mandor/lihat_tim.dart';
 import 'package:buku_kerja_mandor/rencana_kerja_harian.dart';
+import 'package:buku_kerja_mandor/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'drawer.dart';
@@ -32,13 +33,11 @@ class Beranda extends StatelessWidget {
         width: double.maxFinite,
         child: ListView(
             children: <Widget>[
-              //MenuButton(0),
-              //SizedBox(height: 10),
+              MenuButton(0),
+              SizedBox(height: 10),
               MenuButton(1),
               SizedBox(height: 10),
               MenuButton(2),
-              SizedBox(height: 10),
-              MenuButton(3),
             ]
         ),
       ),
@@ -49,37 +48,29 @@ class Beranda extends StatelessWidget {
 class MenuButton extends StatelessWidget {
   MenuButton(this.num);
   final int num;
-  final text = ["BKM Hari Ini","Rencana Kerja Harian","Lihat Tim","Kalendar"];
+  final text = ["Rencana Kerja Harian","Lihat Tim","Kalender"];
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return GestureDetector(
       onTap: () {
-        /**
         if(num == 0) {
           Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(1);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BKM()),
+            MaterialPageRoute(builder: (context) => RencanaKerjaHarian(authService.getRole)),
           );
         }
-            **/
         if(num == 1) {
           Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(2);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RencanaKerjaHarian()),
-          );
-        }
-        if(num == 2) {
-          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(3);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => LihatTim()),
           );
         }
-        if(num == 3) {
-          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(4);
+        if(num == 2) {
+          Provider.of<ApplicationDrawer>(context, listen: false).setCurrentDrawer(3);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Kalender()),
